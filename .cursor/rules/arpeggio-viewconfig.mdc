@@ -1,0 +1,11 @@
+---
+description: How to author sheet and create/edit form ViewConfigs. Copy Country or the eight PM resources. Never invent widgets, view builders, or page-level field layouts.
+globs: "{maestro/**/*.views.ts,armonia/**/viewConfig/**,sinfonia/**/sheetView/**,sinfonia/**/{create,edit}*.tsx,sinfonia/**/widgetContribution.tsx,sinfonia/**/viewEngine/**,sinfonia/**/entityPage/**}"
+alwaysApply: false
+---
+
+# Pointer
+
+Canonical text: `docs/architecture/rules/viewconfig.md` (moved verbatim on 2026-11-04 with governance additions). Edit it there, not here.
+
+@docs/architecture/rules/viewconfig.md

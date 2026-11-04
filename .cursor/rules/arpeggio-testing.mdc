@@ -1,0 +1,14 @@
+---
+description: Testing and verification (TST-*).
+globs: "**/_tests/**,**/*.test.{ts,tsx}"
+alwaysApply: false
+---
+
+# Testing
+
+- vitest only; colocated `_tests/`; DB tests use mongodb-memory-server **replset**; fake adapters for integrations.
+- Business-rule changes get a test; bug fixes get a failing-first regression test; core changes get core-fixture tests.
+- Never weaken or skip a test to get green; report failures.
+
+@docs/architecture/rules/testing.md
+@docs/architecture/TESTING_STANDARDS.md

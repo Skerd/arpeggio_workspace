@@ -1,0 +1,11 @@
+---
+description: Populated-ref snippets — Armonia wire DTOs only; Maestro defineSnippet on I*; mapSnippet in DTO mappers.
+globs: "**/*.snippets.ts,armonia/**/dto/**/*.ts,**/database/utilities/snippet.ts,**/utilities/mappers/**/*.ts,{armonia,maestro}/**/database/schemas/**/*.ts,armonia/**/types/**/*.ts"
+alwaysApply: false
+---
+
+# Pointer
+
+Canonical text: `docs/architecture/rules/snippets.md` (moved verbatim on 2026-11-04 with governance additions). Edit it there, not here.
+
+@docs/architecture/rules/snippets.md

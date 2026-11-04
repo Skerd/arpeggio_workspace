@@ -1,0 +1,27 @@
+# Workspace repo (D28): ALLOWLIST. Tracks only governance + workspace tooling.
+# The 25 project repos (armonia, maestro, sinfonia, solfeggio and their nested module repos),
+# media, personal files and data dumps are never tracked here.
+
+/*
+
+!/.gitignore
+!/CLAUDE.md
+!/AGENTS.md
+!/package.json
+!/pushAll.sh
+
+!/docs/
+!/.cursor/
+!/.claude/
+/.claude/settings.local.json
+
+!/scripts/
+# live data dump (1.1 GB): never track
+/scripts/restore/
+# contains live DB credentials: never track
+/scripts/backup-mongo.sh
+# leftover migrations (D19, removal pending approval)
+/scripts/migrations/
+/scripts/migrate-*
+
+.DS_Store

@@ -1,0 +1,20 @@
+---
+description: Arpeggio governance entry point — always on. Canonical rules live in docs/architecture; this file carries only the must-knows.
+alwaysApply: true
+---
+
+# Arpeggio — governance (always applies)
+
+Canonical text: `docs/architecture/` (start at `README.md`). Cite rule IDs in reports.
+
+- **GLB-01** Verified code is the current truth; approved decisions (D01–D50) are the target; open conflict → stop and ask.
+- **GLB-02** Verify every API/pattern in source before using it; if it isn't under `*/modules/core` or a verified usage, it doesn't exist.
+- **GLB-03** Copy the closest canonical (Country CRUD, PM Reservation lifecycle, PM dashboard router); smallest correct change; no speculative abstractions.
+- **AGT-01** Stop and ask on: behavior ambiguity, approval items, open conflicts, no canonical pattern. Otherwise proceed and list assumptions.
+- **AGT-03/04/05/07** Approval required: commits/pushes, dependency changes, deleting anything not *confirmed* dead, destructive dev data. No AI attribution in commits. Never commit `maestro/xServers/apiServer.ts` debug connects.
+- **AGT-08/10** Done = effect proven live at every touched layer + `npm run verify` output reported; otherwise "NOT live-verified".
+- **AGT-09** Report: Outcome · Changes (by repo) · Reused · Decisions · Verification · Debt · Open.
+- **GLB-06** Fresh start: no data migrations unless asked; seeds/defaults/role grants carry schema changes.
+
+@docs/architecture/AI_AGENT_RULES.md
+@docs/architecture/rules/global.md

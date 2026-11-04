@@ -1,0 +1,15 @@
+---
+description: Security — auth, action permissions, reserved request keys, public origin, tenancy, sensitive data, AI tools (SEC-*).
+globs: "maestro/**,armonia/**/schemas/**"
+alwaysApply: false
+---
+
+# Security
+
+- **SEC-02** Action authorization: interim explicit `checkModelPermission`/party guard in every new action (target: core-enforced action permissions).
+- **SEC-03** Never trust client-supplied values for server-owned keys (`company`, `actionUserCtx`, `session`, `sanitizedWriteFields`, `parentBypass`…).
+- **SEC-04** Public origin resolution must fail closed (target); don't extend the wildcard fallback.
+- **SEC-06** Health/identity/payment fields: tag, default `read: "no-permission"`, never in snippets/lists/logs/emails/AI output.
+- **SEC-07** AI tools act as the requesting user; writes via actions/services; public chat read-only.
+
+@docs/architecture/rules/security.md

@@ -1,0 +1,18 @@
+---
+description: Maestro backend — layers, routes, actions, transactions, side effects, integrations, logging (BE-*).
+globs: maestro/**
+alwaysApply: false
+---
+
+# Maestro backend
+
+- **BE-01** service = DB on one model · actions = actor operations on a record · `workflows/` = cross-entity · `integrations/` = external adapters · `utilities/` = pure helpers · routes only wire.
+- **BE-02** Non-HTTP triggers never call action methods directly (target: `invokeAction`); new multi-trigger transition → ask.
+- **BE-03** `createCrudRouter` for the 7 verbs; `@action` POST for lifecycle; never PATCH as a state machine; manual Router only for aggregations/public/webhooks.
+- **BE-07** Errors: `apiValidationException` + key in 5 locales; never `throw new Error`.
+- **BE-08** Side effects (notifications, email, WS, Kafka, HTTP) inside a transaction → `runAfterCommit`.
+- **BE-11** Log via `params.logger` / `getLogger`; no `console.*`.
+- **SEC-02 (interim)** Every new action checks `SchemaGuard.checkModelPermission` or a party guard; never a field-write check as stand-in.
+
+@docs/architecture/rules/backend.md
+@docs/architecture/rules/security.md

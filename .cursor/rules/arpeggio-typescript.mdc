@@ -1,0 +1,11 @@
+---
+description: Cornerstone — trust the architecture and validated boundaries; infer; fix types at the source; never cast uncertainty away.
+globs: "{armonia,maestro,sinfonia}/**/*.{ts,tsx}"
+alwaysApply: true
+---
+
+# Pointer
+
+Canonical text: `docs/architecture/rules/typescript.md` (moved verbatim on 2026-11-04 with governance additions). Edit it there, not here.
+
+@docs/architecture/rules/typescript.md

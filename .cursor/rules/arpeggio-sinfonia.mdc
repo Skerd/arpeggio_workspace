@@ -1,0 +1,18 @@
+---
+description: Sinfonia frontend — contributions, page factories, HTTP calls, state, UI primitives, lazy pages, i18n, a11y (FE-*).
+globs: sinfonia/**
+alwaysApply: false
+---
+
+# Sinfonia
+
+- **FE-01** Mount panel UI only through `<kind>Contribution.tsx`; never edit core routeConfig/sidebar. Public/dyeus apps don't use panel contributions; portal uses `portalContribution`.
+- **FE-02** `EntityListPage` + `createGenericCreatePage`/`createGenericEditPage`; doesn't fit → compose parts or propose a seam.
+- **FE-03** Components use `withAxios`; hooks use `useHttpRequest`; `apiClient` only in core helpers; no new axios/fetch.
+- **FE-05** Redux: session/language/notifications/chat/UI/serverResources only; no entity data, no refetch counters.
+- **FE-06** New panel pages via `React.lazy`.
+- **FE-07** Only `components/ui` primitives; no raw `<button>/<select>/<table>/<input>` in features; tabler icons.
+- **FE-08** `withLanguage("<own path>")`; real translations in all 5 locales (en-US, de-CH, fr-FR, it-IT, sq-AL).
+- **FE-09** Public apps WCAG 2.2 AA; panel keyboard/labels/focus baseline.
+
+@docs/architecture/rules/frontend.md

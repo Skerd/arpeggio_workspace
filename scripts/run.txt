@@ -1,0 +1,2 @@
+    "migrate:backfill-ai-channels": "ts-node --transpile-only -r tsconfig-paths/register ../scripts/migrations/backfillAiChannels.ts",
+    "migrate:mirror-garda-unit-polygons": "ts-node --transpile-only -r tsconfig-paths/register ../scripts/migrations/mirrorGardaUnitPolygonsFromFloor5.ts",

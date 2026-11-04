@@ -1,0 +1,17 @@
+---
+description: Maestro persistence — plugins, tenancy, model access, soft delete, indexes, snapshots (DB-*).
+globs: "maestro/**/database/**,maestro/**/api/**,maestro/**/utilities/**"
+alwaysApply: false
+---
+
+# Maestro database
+
+- **DB-01** All four plugins on every schema; skip only for no-tenant / TTL / machine-write reasons, listed with reason.
+- **DB-02** `company` is the only tenant key; pass `{company: company._id}` on every tenant query (BaseCrudService does not add it).
+- **DB-03** Model statics only in `*.service.ts`, plugins, seeds — never in routes, hooks, actions.
+- **DB-04** Aggregates on soft-delete collections start with `$match: {deletedAt: null, company…}`.
+- **DB-06** Indexes in `*.indexes.ts`; new filter/sort fields get a `company`-first compound index.
+- **DB-07** Reference by default; snapshot price/tax/currency/names/addresses on commercial and legal records.
+- **GLB-08/09** Money: Decimal128 + currency, exact scaled-integer math. Dates: UTC instants, local calendar strings.
+
+@docs/architecture/rules/database.md

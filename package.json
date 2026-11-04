@@ -1,0 +1,25 @@
+{
+    "name": "arpeggio",
+    "private": true,
+    "description": "Repo-level task runner for the Arpeggio projects (sinfonia panel, maestro API, armonia shared types). Each project keeps its own package.json, lockfile and node_modules; this file only fans commands out to them.",
+    "scripts": {
+        "test": "npm run test:sinfonia && npm run test:maestro",
+        "test:sinfonia": "npm test --prefix sinfonia",
+        "test:maestro": "npm test --prefix maestro",
+        "typecheck": "npm run typecheck --prefix sinfonia",
+        "lint": "npm run lint --prefix sinfonia",
+        "verify": "npm run test && npm run typecheck && npm run lint",
+        "dev": "node scripts/dev/arpeggio.mjs",
+        "dev:ecommerce": "node scripts/dev/arpeggio.mjs up ecommerce",
+        "dev:carRental": "node scripts/dev/arpeggio.mjs up carRental",
+        "dev:dentalClinic": "node scripts/dev/arpeggio.mjs up dentalClinic",
+        "dev:propertyManagement": "node scripts/dev/arpeggio.mjs up propertyManagement",
+        "dev:all": "node scripts/dev/arpeggio.mjs up all",
+        "dev:list": "node scripts/dev/arpeggio.mjs list",
+        "reset:ecommerce": "node scripts/dev/arpeggio.mjs reset ecommerce",
+        "reset:carRental": "node scripts/dev/arpeggio.mjs reset carRental",
+        "reset:dentalClinic": "node scripts/dev/arpeggio.mjs reset dentalClinic",
+        "reset:propertyManagement": "node scripts/dev/arpeggio.mjs reset propertyManagement",
+        "reset:all": "node scripts/dev/arpeggio.mjs reset all"
+    }
+}

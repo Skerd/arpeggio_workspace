@@ -1,0 +1,14 @@
+---
+description: Armonia contracts — SchemaDef, Zod construction, exceptions, isomorphism (BE-05/06/07, D37).
+globs: "armonia/**,{maestro,sinfonia}/**/*.{ts,tsx}"
+alwaysApply: false
+---
+
+# Armonia contracts
+
+- **BE-05** Validate bodies with `validateFormZod` + the Armonia factory that sinfonia's form also uses.
+- **BE-06** Entity create/edit → `buildCreateZodSchema`/`buildEditZodSchema`. Other payloads may be hand-written in Armonia, but every value check uses a `zodBuilder.ts` helper (`stringMaxLengthZod`, `isNumberZod`, `isEnumZod`…) — never raw `z.string().max()`/`z.coerce`. Missing helper → add it to `zodBuilder.ts`. No Zod in maestro/sinfonia.
+- **BE-07** `apiValidationException` + exception key in all 5 locales; module keys never override core keys.
+- **D37** Armonia is isomorphic: no `fs`/`path`/`os`/`crypto` or server-only libs (existing `exceptions.ts` debt: never value-import such validators into sinfonia).
+
+@docs/architecture/rules/backend.md
