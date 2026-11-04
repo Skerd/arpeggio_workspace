@@ -59,7 +59,7 @@ vitest + Testing Library. Forms and sheets: [viewconfig.md](viewconfig.md).
   - Exception keys (BE-07) follow the same rule.
   - Moving a component means moving its JSON in 5 locales and its literal. Prefer flattening over relocating.
 - **Current state:** swissOutreach `fr-CH`/`it-CH` folders never match (debt), and missing dictionaries render `---key---` silently.
-- **Why:** D30; memory sinfonia-i18n-path-coupling. **Enforce:** guard test (exists) + check `i18n` ★ (5-locale existence).
+- **Why:** D30; memory sinfonia-i18n-path-coupling. **Enforce:** guard test + check `i18n` (dictionary existence and key parity across 5 locales, baselined).
 
 ### FE-09 · MUST · Accessibility
 - **Rule:** Public apps (portal shop/clinic/rental, PM public, dyeus) meet WCAG 2.2 AA. The panel meets a baseline: keyboard-operable, labelled controls, visible focus. The jsx-a11y recommended set is `error` in all apps (today 6 rules at `warn`).

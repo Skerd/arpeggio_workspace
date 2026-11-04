@@ -1,6 +1,6 @@
 # Architectural decisions
 
-Confirmed by the architect on 2026-11-04. The full Q&A with original answers is in [ARCHITECTURE_INTERVIEW.md](ARCHITECTURE_INTERVIEW.md).
+Confirmed by the architect on 2026-11-04 (D01–D50 in the interview; D51+ appended later). The full Q&A with original answers is in [ARCHITECTURE_INTERVIEW.md](ARCHITECTURE_INTERVIEW.md).
 **Status:** *In force* = agents must follow it now · *Target Pn* = approved change, built in roadmap phase n (agents follow the
 stated interim rule until then). New APPROVAL REQUIRED decisions are appended here (GLB-10).
 
@@ -57,3 +57,4 @@ stated interim rule until then). New APPROVAL REQUIRED decisions are appended he
 | D48 | Roadmap order: governance → gates → security → consistency → frontend → module debt | — | Plan |
 | D49 | `invokeAction` seam for non-HTTP triggers; `workflows/`, `integrations/`, pure `utilities/` | BE-01/02 | Seam Target P3 (interim: ask) |
 | D50 | Authority policy confirmed | GLB-01 | In force |
+| D51 | Zod outside Armonia is allowed only for AI assistant tool-parameter schemas (`maestro/modules/*/domain/ai/`) and sinfonia's Vite env validation; route-file Zod stays debt (2026-11-04, resolves C13) | BE-06 | In force; `check:zod` exempts those paths |

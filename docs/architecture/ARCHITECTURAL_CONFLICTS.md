@@ -17,6 +17,7 @@ Contradictions between code, docs and rules. Per GLB-01, a conflict with no deci
 | C10 | `.cursor/rules/arpeggio-viewconfig.mdc` says "never add widgets" vs D04 seam policy | VC-03: a new widget token = APPROVAL REQUIRED seam | RESOLVED |
 | C11 | Root `verify` covers only sinfonia typecheck/lint; maestro's TS 4.8 typecheck is vacuous | D07/D08 | RESOLVED (P1) |
 | C12 | `pushAll.sh` says "21 repos (3 cores + 18 modules)" and skips solfeggio; there are 25 | Update the script comment/coverage when the workspace repo is created | OPEN (tooling) |
+| C13 | D11 says no Zod outside Armonia. The `check:zod` baseline finds 60 maestro/sinfonia files, about 40 of them AI assistant tool-parameter schemas (`maestro/modules/*/domain/ai/tools/*`), plus sinfonia Vite env validation (`sinfonia/src/modules/core/helpers/environment/env.ts`) and more route files than discovery found (finance, carRental, dentalClinic, PM) | D51: both exempt (not client/server contracts); route-file Zod stays baselined debt | RESOLVED |
 
 ## Open decisions
 None from the interview (U01 was resolved by D49). Items that need a decision later:

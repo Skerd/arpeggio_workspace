@@ -8,13 +8,13 @@ vertical's use of core. Read [../CORE_USAGE_GUIDE.md](../CORE_USAGE_GUIDE.md) fo
 ### CORE-01 · MUST NOT · Core knows no vertical
 - **Rule:** Core (all three packages, core tests included) never imports, string-references (`isModuleEnabled("eCommerce")`) or fixtures a vertical. Verticals plug in only through core extension points. The **only** exception is the core-owned module manifest (CORE-06).
 - ✅ A vertical registers an env-validator contribution. ❌ `maestro/modules/core/environment/validator.ts:176,185` checking `"propertyManagement"`/`"eCommerce"` (debt). ❌ sinfonia core viewEngine tests importing `@propertyManagementModule` (debt → core fixtures).
-- **Why:** D03. **Enforce:** check `boundaries` ★. **Exception:** none.
+- **Why:** D03. **Enforce:** check `boundaries`. **Exception:** none.
 
 ### CORE-02 · MUST · Cross-module imports follow declared edges only
 - **Rule:** Any import from module A into module B (runtime, `import type`, seed/demo, test) requires `A dependsOn B` in the manifest. This holds in all three packages. A reverse need goes through a core seam, or the code moves to the dependent module.
 - Declared today: `finance, propertyManagement, swissOutreach, carRental(+finance), dentalClinic(+finance), eCommerce(+finance), propertyDevelopment(+propertyManagement)` → core.
 - ❌ maestro `finance/database/schemas/{paymentTransaction,escrowTransaction,giftCard}/*.defaults.ts` importing eCommerce (debt). ❌ sinfonia PM `constructionProgressSection.tsx:11`, `deliveryReadinessCard.tsx:13` importing PD types (debt).
-- **Why:** D02. A core+finance+carRental deploy does not clone eCommerce. **Enforce:** check `boundaries` ★.
+- **Why:** D02. A core+finance+carRental deploy does not clone eCommerce. **Enforce:** check `boundaries`.
 
 ### CORE-03 · Seams, not switches
 | Action | Class |
@@ -51,7 +51,7 @@ vertical's use of core. Read [../CORE_USAGE_GUIDE.md](../CORE_USAGE_GUIDE.md) fo
   - Never edit core `routeConfig.tsx` or the core sidebar to mount a feature.
   - After adding a module folder, run `npm run sync:module-aliases`.
 - **Gating:** `ENABLED_MODULES` (maestro) / `VITE_ENABLED_MODULES` (sinfonia). `core` is always on.
-- **Why:** verified discovery; D01a; existing modules rule (module.json clause retired). **Enforce:** review + check `boundaries` ★.
+- **Why:** verified discovery; D01a; existing modules rule (module.json clause retired). **Enforce:** review + check `boundaries`.
 
 ### CORE-07 · MUST · Core changes carry tests
 - **Rule:** Every change to a core component, helper or seam adds or updates a core test. That test uses core fixtures, never vertical code (CORE-01).

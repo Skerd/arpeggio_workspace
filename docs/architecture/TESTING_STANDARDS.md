@@ -7,7 +7,7 @@ Rule IDs: [rules/testing.md](rules/testing.md) (TST-01..07). Decisions: D24, D25
 |---|---|---|---|
 | maestro | vitest ^1.6 (`maestro/vitest.config.ts`, tsconfig paths only) | node | `mongodb-memory-server` replset (transactions work), `modules/core/_tests/httpHarness.ts` (Express app + auth stub), `vi.mock` |
 | sinfonia | vitest ^4 (`sinfonia/vitest.config.ts`) | jsdom, globals, `src/test/setup.ts` | Testing Library + jest-dom |
-| armonia | vitest ^4.1 (`armonia/vitest.config.ts`; the stale `vitest.config.js` sits next to it) | node | none |
+| armonia | vitest ^4.1 (`armonia/vitest.config.ts`; the stale `vitest.config.js` sits next to it), run by root `npm test` | node | none |
 
 Test files live in colocated `_tests/` folders. Do not use `__tests__` or add a second runner.
 

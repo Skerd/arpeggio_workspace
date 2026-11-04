@@ -15,7 +15,7 @@ The mandatory protocol for every meaningful task. Rule references point into [ru
 | 8 | Plan the minimal correct change | Smallest change that fully works; definition of done (GLB-07) for schema changes; no migrations (GLB-06). |
 | 9 | Implement | Copy the canonical, no unrequested expansion, debt only per AGT-06. |
 | 10 | Verify correctness | Tests per TST-01..03 (regression test for bug fixes). |
-| 11 | Run checks | Root `npm run verify` (GLB-11). Until P1 lands, also run `sinfonia/node_modules/.bin/tsc -p maestro --noEmit` and note new errors in touched files. |
+| 11 | Run checks | Root `npm run verify` (GLB-11). It runs the governance checks first (`npm run check`, about 1 s). Until maestro's TS upgrade lands, also run `sinfonia/node_modules/.bin/tsc -p maestro --noEmit` and note new errors in touched files. |
 | 12 | Live verification | TST-07: API against a dev profile + DB effect; UI click-through incl. empty, error and permission-denied cases. See `.claude/skills/verify/SKILL.md`. |
 | 13 | Review the diff | Every nested repo touched; no debug code, no unrelated churn, no apiServer debug connects. |
 | 14 | Identify unintended changes | Formatting rewrites, regenerated `tsconfig.json` (sinfonia vite rewrites module paths), lockfile churn. |
@@ -25,7 +25,7 @@ The mandatory protocol for every meaningful task. Rule references point into [ru
 ## Dev environment (verified)
 - Profiles: `npm run dev -- up|reset <profile>`, with profiles ecommerce, carRental, dentalClinic, propertyManagement and all. Each has its own DB, Redis DB, Kafka prefix and ports (81/91/101/111/121). See `scripts/dev/README.md`. `reset` is destructive (AGT-07).
 - Manual start: `cd maestro && npm run api:development`; `cd sinfonia && npm run coreDev`.
-- Tests: root `npm test` (sinfonia + maestro); `npm test --prefix armonia` for armonia (not yet in root verify).
+- Tests: root `npm test` runs armonia, sinfonia and maestro.
 
 ## Definition of done
 - [ ] Outcome proven live at every touched layer (AGT-10, TST-07)

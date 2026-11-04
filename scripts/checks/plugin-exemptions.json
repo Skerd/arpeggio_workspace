@@ -1,0 +1,87 @@
+{
+  "_comment": "DB-01 / D12. Each entry: {\"skip\": {plugin: reason}, \"note\": why}. Pairings are fixed: ownership <- no-tenant, softDelete <- ttl-expiry, audit <- machine-writes. lifeCycle has no exemption reason.",
+  "maestro/modules/core/database/schemas/cronLock/cronLock.ts": {
+    "skip": {
+      "ownership": "no-tenant",
+      "softDelete": "ttl-expiry",
+      "audit": "machine-writes"
+    },
+    "note": "Cluster-wide job lock: no company, expireAfterSeconds:0 on expiresAt, renewed every few seconds."
+  },
+  "maestro/modules/core/database/schemas/performance/serverHealth/serverHealth1d.ts": {
+    "skip": {
+      "ownership": "no-tenant",
+      "softDelete": "ttl-expiry",
+      "audit": "machine-writes"
+    },
+    "note": "Per-server metric rollup: no company, TTL index, written by the metrics jobs."
+  },
+  "maestro/modules/core/database/schemas/performance/serverHealth/serverHealth1h.ts": {
+    "skip": {
+      "ownership": "no-tenant",
+      "softDelete": "ttl-expiry",
+      "audit": "machine-writes"
+    },
+    "note": "Per-server metric rollup: no company, TTL index, written by the metrics jobs."
+  },
+  "maestro/modules/core/database/schemas/performance/serverHealth/serverHealth1m.ts": {
+    "skip": {
+      "ownership": "no-tenant",
+      "softDelete": "ttl-expiry",
+      "audit": "machine-writes"
+    },
+    "note": "Per-server metric rollup: no company, TTL index, written by the metrics jobs."
+  },
+  "maestro/modules/core/database/schemas/performance/serverPerformance/serverPerformance1d.ts": {
+    "skip": {
+      "ownership": "no-tenant",
+      "softDelete": "ttl-expiry",
+      "audit": "machine-writes"
+    },
+    "note": "Per-server metric rollup: no company, TTL index, written by the metrics jobs."
+  },
+  "maestro/modules/core/database/schemas/performance/serverPerformance/serverPerformance1h.ts": {
+    "skip": {
+      "ownership": "no-tenant",
+      "softDelete": "ttl-expiry",
+      "audit": "machine-writes"
+    },
+    "note": "Per-server metric rollup: no company, TTL index, written by the metrics jobs."
+  },
+  "maestro/modules/core/database/schemas/performance/serverPerformance/serverPerformance1m.ts": {
+    "skip": {
+      "ownership": "no-tenant",
+      "softDelete": "ttl-expiry",
+      "audit": "machine-writes"
+    },
+    "note": "Per-server metric rollup: no company, TTL index, written by the metrics jobs."
+  },
+  "maestro/modules/core/database/schemas/performance/serviceUptime/serviceUptime.ts": {
+    "skip": {
+      "ownership": "no-tenant",
+      "softDelete": "ttl-expiry",
+      "audit": "machine-writes"
+    },
+    "note": "Per-server metric rollup: no company, TTL index, written by the metrics jobs."
+  },
+  "maestro/modules/core/database/schemas/apiAccess/apiAccess.ts": {
+    "skip": {
+      "softDelete": "ttl-expiry",
+      "audit": "machine-writes"
+    },
+    "note": "Raw API access log: TTL on createdAt, one write per request."
+  },
+  "maestro/modules/core/database/schemas/cronExecution/cronExecution.ts": {
+    "skip": {
+      "softDelete": "ttl-expiry",
+      "audit": "machine-writes"
+    },
+    "note": "Execution history: retention TTL on finishedAt, written by the cron runner."
+  },
+  "maestro/modules/core/database/schemas/user/user.ts": {
+    "skip": {
+      "ownership": "no-tenant"
+    },
+    "note": "Users span companies (architect, D12)."
+  }
+}

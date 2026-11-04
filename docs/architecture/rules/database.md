@@ -11,9 +11,9 @@ with Mongoose 6; stay on mongodb 4 / Mongoose 6 (maestro README).
   1. No tenant → no ownership. Users, `cronLock`, server health/performance metrics. Basis: `ownershipPlugin` makes `company` `required: true`.
   2. Mongo TTL expiry → no softDelete. `cronLock` (`expireAfterSeconds: 0`), metric rollups, `apiAccess` raw, `cronExecution`.
   3. Constant machine writes → no audit. Locks, metrics. Basis: `auditPlugin` does an extra `findById` and an audit insert per update.
-- Every skip is recorded **with its reason** in the single plugin-exemption list (to be created in P1 with check `plugins`). An unlisted gap fails the gate.
+- Every skip is recorded **with its reason** in `scripts/checks/plugin-exemptions.json`. An unlisted gap fails the gate (existing gaps are baselined debt).
 - **Note:** `auditPlugin` sets `timestamps: true` and duplicates `lifeCyclePlugin`'s timestamps, and `lifeCycle` and `ownership` both add `{company:1,_id:1}`. Simplifying that overlap is a roadmap item; keep applying both until then.
-- **Why:** D12. **Enforce:** check `plugins` ★.
+- **Why:** D12. **Enforce:** check `plugins`. Exemptions live in `scripts/checks/plugin-exemptions.json`, one fixed reason per plugin; lifeCycle has none.
 
 ### DB-02 · MUST · Tenancy
 - **Rule:**
@@ -25,7 +25,7 @@ with Mongoose 6; stay on mongodb 4 / Mongoose 6 (maestro README).
 ### DB-03 · MUST · Models are touched only by services
 - **Rule:** Mongoose model statics (`Model.find/findOne/updateOne/aggregate/create…`) are called only in `*.service.ts`, plugins, migrations and seeds. Routes, crud hooks, actions and workflows go through the entity's service.
 - ❌ ~300 sites in `api/` (top: `dentalClinic/.../public/patientPortal.ts` 20, `eCommerce/.../cart.ts` 15, `carRental/.../rentalStorefront.ts` 14; `carRental/.../vehicleDamage.ts:110` inside `afterRestore`). These are baselined debt.
-- **Why:** D17, D05. **Enforce:** check `model-access` ★ (with a baseline file).
+- **Why:** D17, D05. **Enforce:** check `model-access` (baselined).
 
 ### DB-04 · MUST · Soft delete
 - **Rule:** Soft delete is the default (`softDeletePlugin`). Physical delete only with `hard: true` on the service. **Approved (P2):** the plugin adds a `pre('aggregate')` hook that prepends `{deletedAt: null}`, with an explicit opt-out.

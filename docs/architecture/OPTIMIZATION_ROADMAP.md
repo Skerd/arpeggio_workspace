@@ -16,14 +16,14 @@ Scale: Severity (S1 critical → S4 low) · Impact (H/M/L) · Confidence (H/M/L)
 | Item | Sev | Impact | Conf | Risk | Effort | Deps | Action |
 |---|---|---|---|---|---|---|---|
 | One TypeScript version in all 3 packages; fix 242 maestro errors (PD 158 first) | S1 | H | H | M | L | dependency approval | D07 |
-| Root `verify`: tsc ×3 + armonia tests | S1 | H | H | L | S | above | D08 |
-| `check:boundaries` from the manifest (D02/D03) | S2 | H | H | L | M | — | node script, no deps |
-| `check:plugins` + exemption list (D12) | S2 | M | H | L | S | — | script |
-| `check:zod` (raw primitives, Zod outside armonia) (D11) | S3 | M | H | L | S | — | script |
-| `check:model-access` with a baseline (D17) | S3 | M | H | L | S | — | script |
-| `check:i18n` (5 locales per literal/exception key) (D30) | S3 | M | H | L | S | — | extend the guard test |
+| Root `verify`: tsc ×3 + armonia tests | S1 | H | H | L | S | above | **armonia tests + armonia tsc done 2026-11-04**; maestro tsc waits on the upgrade |
+| `check:boundaries` from the manifest (D02/D03) | S2 | H | H | L | M | — | **Done 2026-11-04** (13 baselined) |
+| `check:plugins` + exemption list (D12) | S2 | M | H | L | S | — | **Done 2026-11-04** (11 exemptions, 97 baselined gaps) |
+| `check:zod` (raw primitives, Zod outside armonia) (D11) | S3 | M | H | L | S | — | **Done 2026-11-04** (824 baselined; C13 open) |
+| `check:model-access` with a baseline (D17) | S3 | M | H | L | S | — | **Done 2026-11-04** (780 calls in 190 files baselined) |
+| `check:i18n` (5 locales per literal/exception key) (D30) | S3 | M | H | L | S | — | **Done 2026-11-04** as a script (136 baselined) |
 | ESLint for maestro (`no-console`) and armonia (no Node built-ins); sinfonia restricted imports + jsx-a11y errors | S3 | M | H | L | M | dependency approval | D22/D23/D37/D38 |
-| `check:governance` (links, rule IDs) | S4 | L | H | L | S | — | D29 |
+| `check:governance` (links, rule IDs) | S4 | L | H | L | S | — | **Done 2026-11-04** (must stay clean, no baseline) |
 | Deploy image runs tsc + tests; remove the armonia `sed` patch | S2 | H | H | M | S | TS fix | D07/D08 |
 
 ## P2: Security invariants

@@ -2,7 +2,7 @@
 
 Apply to every package and every task. Each rule cites the interview decision (D-id, see
 [../ARCHITECTURAL_DECISIONS.md](../ARCHITECTURAL_DECISIONS.md)) or verified code it rests on.
-Enforcement labels: **check `<name>`** = a mechanical check in root `npm run verify` (★ = planned, roadmap P1, not yet built);
+Enforcement labels: **check `<name>`** = a mechanical check in root `npm run verify` (★ = planned for roadmap P1, not built yet);
 **review** = agent and architect review only.
 
 ---
@@ -38,7 +38,7 @@ Enforcement labels: **check `<name>`** = a mechanical check in root `npm run ver
   2. **UI chain:** ViewConfig create/edit/sheet nodes (VC-02), TableConfiguration column/filter if listable, labels in all 5 locales (FE-10).
   3. **Seeds and defaults:** `*.defaults.ts`, demo data, default-role grants.
   4. **Test:** one for the field's business rule, if it has one.
-- **Why:** D20. **Enforce:** review + check `i18n` ★.
+- **Why:** D20. **Enforce:** review + check `i18n`.
 
 ### GLB-08 · MUST · Money
 - **Rule:** Store money as `Decimal128` with its currency. Do all arithmetic through the one core money helper using exact scaled integers. Never do float math on amounts. Round once, at defined points (line, tax, document total), to the currency's precision.
@@ -67,5 +67,5 @@ Enforcement labels: **check `<name>`** = a mechanical check in root `npm run ver
 
 ### GLB-11 · MUST · Full verify before claiming done
 - **Rule:** Run root `npm run verify` and report its output (counts, failures). Never claim checks passed without running them.
-- **Current state:** `verify` = sinfonia+maestro tests, sinfonia typecheck, sinfonia lint. Target (P1): + armonia tests, tsc ×3, and the ★ checks.
+- **Current state:** `verify` = the six governance checks (`npm run check`) + armonia/sinfonia/maestro tests + armonia/sinfonia typecheck + sinfonia lint. Still missing (P1): maestro typecheck (needs the TS upgrade) and the ★ lint rules.
 - **Why:** D08. **Enforce:** the gate itself.

@@ -47,10 +47,10 @@ rules in [security.md](security.md).
 | Any value check (length, number range, enum, id, date, url, boolean) | **MUST** use a `zodBuilder.ts` helper (`stringMaxLengthZod`, `isNumberZod`, `inBetweenRangeZod`, `isEnumZod`, `isObjectIdZod`, `isBooleanZod`, `parsableDateStringZod`, `isUrlZod`, …) so the message is localized and stays correct if the rule changes |
 | Raw `z.string()`, `z.number()`, `z.coerce`, `.min(`, `.max(` in validators | **MUST NOT**. Raw Zod is for structure only: `z.object`, `.optional()`, `.refine` with an exception key |
 | No helper fits | **MAY** add a generic helper + its locale key to `zodBuilder.ts` (no approval) |
-| Zod defined in maestro or sinfonia | **MUST NOT**. Debt: 6 maestro eCommerce files (`fiscal.ts`, `productOrder.ts`, `checked/posSession.ts`, `posOrder.ts`, `inventoryMovement.ts`, `public/shopProductReviews.ts`) and sinfonia `listingCategories/editCategory.tsx` |
+| Zod defined in maestro or sinfonia | **MUST NOT**, except AI assistant tool-parameter schemas under `maestro/modules/*/domain/ai/` and sinfonia's Vite env validation (D51). Debt: 6 maestro eCommerce files (`fiscal.ts`, `productOrder.ts`, `checked/posSession.ts`, `posOrder.ts`, `inventoryMovement.ts`, `public/shopProductReviews.ts`) and sinfonia `listingCategories/editCategory.tsx` |
 - Form types **SHOULD** be inferred (`z.infer<ReturnType<typeof schema>>`), not hand-written next to the schema.
 - ✅ `reason: stringMaxLengthZod("reason", 2000, languageCode).optional()` ❌ `reason: z.string().max(2000).optional()`
-- **Why:** D11. **Enforce:** check `zod` ★.
+- **Why:** D11. **Enforce:** check `zod` (baselined; D51 exemptions built in).
 
 ### BE-07 · MUST · Errors
 - **Rule:** Every API failure throws `apiValidationException(code, …)` (`armonia/src/modules/core/helpers/exceptions.ts`) with a key in `armonia/src/modules/<mod>/helpers/static/exceptions/*.json`, present in all 5 locales. Module keys add; they never override core keys.

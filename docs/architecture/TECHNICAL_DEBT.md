@@ -52,15 +52,16 @@ Columns: **ID · Debt · Where · Defined fix (when touched) · Rule**
 | TD-F10 | date-fns imports (9 files) | auditTimeline, quickFilterBar, dateInput, PM/eCommerce views | dayjs (after the dependency is added) | GLB-09 |
 | TD-F11 | `as any` (471) / `@ts-ignore` (8) | sinfonia | Fix the type at its source | TS-01 |
 | TD-F12 | Leftovers | `routeConfig.tsx:74` (`menu === "test"` → `111`), stale `vite.config.ts` base comment, eslint ignore `apps/shop`, `lint:tokens` missing script, coverage include path, commented StrictMode | Remove / fix | GLB-03 |
+| TD-F13 | Failing sinfonia tests (found 2026-11-04 by root verify, cause not investigated) | `sinfonia/scripts/studioSourceIndex.test.ts` ("finds the create/edit sharing…": 38 vs >40), `sinfonia/src/modules/core/clients/studio/catalog/studioModules.test.ts` (eCommerce vs eCommerceMarketplace), `sinfonia/src/modules/core/components/entityPage/list/card/_tests/displayRow.test.tsx` (denied row reported to group) | Investigate: stale test expectation vs regression in uncommitted work | TST-02 |
 
 ## Tooling / repo
 | ID | Debt | Where | Defined fix |
 |---|---|---|---|
 | TD-T01 | Vacuous maestro typecheck, 242 TS 5.9 errors | maestro | P1 |
 | TD-T02 | Dockerfile `sed`-patches armonia `zodBuilder.ts`; prod runs `ts-node-dev --watch` | `solfeggio/apps/maestro/Dockerfile` | Fix the source error; tsc gate; compiled runtime later |
-| TD-T03 | Leftover migrations | `maestro/scripts/migrations/*`, `migrate:*` scripts, root `scripts/migrate-*`, `scripts/migrations/` | Remove (approval) |
+| TD-T03 | Leftover migrations | `maestro/scripts/migrations/*` and its `migrate:*` npm scripts; root `scripts/migrate-entity-cards.mjs` (the architect removed the other root migration scripts and the root migrations folder on 2026-11-04) | Remove (approval) |
 | TD-T04 | musicIndustry remnants | manifest, `@musicIndustry` aliases, `maestro/scripts/import-music-catalog.ts`, sinfonia JSON | Remove (approved, D31) |
 | TD-T05 | Unused deps / double lockfile | sinfonia zustand, @tanstack/react-router, shadcn runtime, faker runtime; `yarn.lock` + `package-lock.json` | Remove (dependency approval) |
-| TD-T06 | Broken scripts | maestro `test:pdf-extraction`; sinfonia `runXAndY`; `scripts/run.txt` missing file | Remove/fix |
+| TD-T06 | Broken scripts | maestro `test:pdf-extraction`; sinfonia `runXAndY` (root `run.txt` was removed by the architect on 2026-11-04) | Remove/fix |
 | TD-T07 | Stale armonia copy | `sinfonia/node_modules/armonia` (copied by `coreInstallAndDev`) | Switch the script to a link or the alias only |
 | TD-T08 | README drift | maestro/sinfonia/armonia READMEs (C9) | Update |

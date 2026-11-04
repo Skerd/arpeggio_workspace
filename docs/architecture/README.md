@@ -37,10 +37,13 @@ Start here for every task (AGT-12). The text in `docs/architecture/` is canonica
 | [OPTIMIZATION_ROADMAP.md](OPTIMIZATION_ROADMAP.md) | P0–P5 |
 
 ## Enforcement status
-- **Mechanical today:** sinfonia `tsc` + ESLint (generic), the `withLanguagePaths` guard test, sinfonia/maestro test suites (root `npm run verify`).
-- **Planned (P1, marked ★ in the rules):** tsc for maestro/armonia, `check:boundaries`, `check:plugins`, `check:zod`, `check:model-access`, `check:i18n`, `check:governance`, ESLint for maestro/armonia, a stricter sinfonia lint, and the deploy gate.
+- **Mechanical today (root `npm run verify`):**
+  - Governance checks in `scripts/checks/`: `check:boundaries`, `check:plugins`, `check:zod`, `check:model-access`, `check:i18n`, `check:governance`. Existing debt is frozen in `scripts/checks/baselines/`, so only **new** violations fail.
+  - armonia + sinfonia `tsc`, sinfonia ESLint (generic), the `withLanguagePaths` guard test, and the armonia/sinfonia/maestro test suites.
+- **Planned (P1, marked ★ in the rules):** maestro `tsc` (blocked on the TypeScript upgrade approval), ESLint for maestro/armonia, the stricter sinfonia lint rules, and the deploy gate.
+- **Baselines:** after fixing debt, run `node scripts/checks/run.mjs --update-baseline` to shrink them. Never re-freeze to accept a new violation without architect approval.
 - **Review only:** seam-vs-switch judgment, layer placement, snapshot correctness, ask-vs-act, live-verification evidence, report shape.
 
 ## Changing the governance
 A rule change needs the architect's approval. Record it as a new D-id in ARCHITECTURAL_DECISIONS.md, edit the canonical rule
-here, and keep the `.mdc` pointers and `CLAUDE.md` in sync (the planned `check:governance` will verify links and IDs).
+here, and keep the `.mdc` pointers and `CLAUDE.md` in sync (`npm run check:governance` verifies links, rule IDs, decision IDs and repo paths).
