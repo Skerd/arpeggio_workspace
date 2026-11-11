@@ -83,7 +83,15 @@ Reference module: **dentalClinic** (D136). Other modules are brought in line whe
   - Durations read "60 min", not "Duration (min): 60".
   - Ranges read "Mon 16 Nov, 13:00–17:00".
   - A weekly schedule is one compact week (`#WeeklyHours`), never one box per day.
-- **Why:** the dental message thread used US 12-hour times with seconds, and hours took a screen per day.
+  - **Every date and time input** uses the core shadcn picker `DateInput` (`sinfonia/src/modules/core/components/custom/inputs/dateInput.tsx`), in forms (`#DateInput`), dialogs, filters and public pages alike:
+    - `valueFormat="YYYY-MM-DD"` for a day;
+    - `timeOnly` for a time;
+    - a time pattern plus `timeZone` for an instant;
+    - `minDate` and `maxDate` for bounds.
+  - Never the browser's own picker (`type="date"`, `type="time"`, `type="datetime-local"`).
+  - A dialog that changes a date opens on the record's current value.
+  - Copy carRental `counter/index.tsx`.
+- **Why:** the dental message thread used US 12-hour times with seconds, and hours took a screen per day. The Move dialog and the Day view used the browser's picker ("dd.mm.yyyy"), unlike every other date in the panel.
 
 ### UX-09 · MUST · Labels, never codes
 - **Rule:** enum values, languages, countries and roles show their translated label in every locale ("Albanian, English, Italian", not "sq,en,it" or "Sq AL").
@@ -122,7 +130,7 @@ A list's own sheet shows the same action menu as its row menu.
 - [ ] Pick before type; derived values generated; one choice for exclusive fields (UX-05)
 - [ ] Defaults and placeholders from the record's own context (UX-06)
 - [ ] Every amount with its currency; price types as words (UX-07)
-- [ ] Dates, durations and hours via GLB-09 helpers and natural ranges (UX-08)
+- [ ] Dates, durations and hours via GLB-09 helpers and natural ranges; every date/time input is the core `DateInput`, never a native picker (UX-08)
 - [ ] Translated labels, no codes (UX-09)
 - [ ] Empty values hidden or turned into a call to action (UX-10)
 - [ ] One noun per entity in all 5 locales (UX-11)
