@@ -1,13 +1,4 @@
 {
-  "maestro/modules/core/environment/validator.ts names vertical \"eCommerce\"": 1,
-  "maestro/modules/core/environment/validator.ts names vertical \"propertyManagement\"": 1,
-  "maestro/modules/finance/database/schemas/escrowTransaction/escrowTransaction.defaults.ts -> eCommerce": 3,
-  "maestro/modules/finance/database/schemas/giftCard/giftCard.defaults.ts -> eCommerce": 1,
-  "maestro/modules/finance/database/schemas/paymentTransaction/paymentTransaction.defaults.ts -> eCommerce": 1,
-  "sinfonia/src/modules/core/components/viewEngine/_tests/formRenderers.test.tsx -> propertyManagement": 1,
-  "sinfonia/src/modules/core/components/viewEngine/_tests/formWidgets.test.tsx -> propertyManagement": 1,
   "sinfonia/src/modules/core/helpers/modules/_tests/enabledModules.test.ts names vertical \"eCommerce\"": 1,
-  "sinfonia/src/modules/core/helpers/modules/_tests/enabledModules.test.ts names vertical \"finance\"": 1,
-  "sinfonia/src/modules/propertyManagement/clients/client/public/project/sections/constructionProgressSection.tsx -> propertyDevelopment": 1,
-  "sinfonia/src/modules/propertyManagement/components/custom/dashboard/deliveryReadinessCard.tsx -> propertyDevelopment": 1
+  "sinfonia/src/modules/core/helpers/modules/_tests/enabledModules.test.ts names vertical \"finance\"": 1
 }

@@ -20,8 +20,5 @@
 /scripts/restore/
 # contains live DB credentials: never track
 /scripts/backup-mongo.sh
-# leftover migrations (D19, removal pending approval)
-/scripts/migrations/
-/scripts/migrate-*
 
 .DS_Store

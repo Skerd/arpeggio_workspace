@@ -26,7 +26,7 @@ Mandatory for every coding agent (Claude Code, Cursor, others) in this workspace
 - Leave a visible control, field, branch or API that cannot do what it appears to do. If something can't work on a surface, leave it off and say so. *(existing senior-companion rule)*
 
 ### AGT-03 · APPROVAL REQUIRED · Git
-- **Approval required:** every commit and every push, in any of the 25 repos.
+- **Approval required:** every commit and every push, in any of the 25 repos. Ask at the moment of committing, listing the repos, files and messages. An earlier "commit later" or "commit after X" answer is not approval.
 - **Repo layout:** the four roots are `armonia`, `maestro`, `sinfonia`, `solfeggio`. Each vertical (carRental, dentalClinic, eCommerce, finance, propertyDevelopment, propertyManagement, swissOutreach) is its **own nested repo** under each package. Commit vertical work inside its own repo; never `git add` a vertical from the parent. Check status with `find . -maxdepth 6 -name .git`.
 - **Never commit** the commented-out Redis/Kafka/WS connects in `maestro/xServers/apiServer.ts` (the architect's local debugging).
 - **Never add** `Co-Authored-By` or any AI attribution line. Commit messages are plain sentences. *(D26, memory)*
@@ -51,7 +51,7 @@ Mandatory for every coding agent (Claude Code, Cursor, others) in this workspace
 - **Rule:** Dev profile `reset`, dropping collections, bulk deletes, and temporarily swapping a user's password hash to log in all need approval. When approved: back up first, restore after, and delete test docs by distinctive titles. *(D26)*
 
 ### AGT-08 · MUST · Verification
-1. Run root `npm run verify` and report its output (GLB-11).
+1. Run the verify and report its output (GLB-11): `npm run verify -- --changed` before a commit, the full `npm run verify` at the end of a multi-lane round and before a push (D135).
 2. Verify live at every touched layer (TST-07). If you can't, write **"NOT live-verified"** with the reason, and report the task as unfinished.
 3. Review the final diff for unintended changes: debug code, formatting churn, unrelated files. *(D08, D25)*
 

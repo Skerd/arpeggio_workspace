@@ -7,7 +7,7 @@ alwaysApply: false
 # Maestro backend
 
 - **BE-01** service = DB on one model · actions = actor operations on a record · `workflows/` = cross-entity · `integrations/` = external adapters · `utilities/` = pure helpers · routes only wire.
-- **BE-02** Non-HTTP triggers never call action methods directly (target: `invokeAction`); new multi-trigger transition → ask.
+- **BE-02** One transition = one shared function; each trigger (action, customer route, cron/webhook via `runInTransaction`) wraps it with its own checks; never call action methods directly (D55).
 - **BE-03** `createCrudRouter` for the 7 verbs; `@action` POST for lifecycle; never PATCH as a state machine; manual Router only for aggregations/public/webhooks.
 - **BE-07** Errors: `apiValidationException` + key in 5 locales; never `throw new Error`.
 - **BE-08** Side effects (notifications, email, WS, Kafka, HTTP) inside a transaction → `runAfterCommit`.

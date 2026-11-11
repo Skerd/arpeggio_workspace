@@ -15,20 +15,19 @@
                  │ MongoDB (sharded, TLS) · Redis (sentinel) · Kafka (optional) · Nginx · ClamAV · Ollama
            solfeggio: Docker Compose, single host, named multi-instance (own DB / Redis DB / Kafka prefix)
 ```
-*Armonia is used in both runtimes, but `helpers/exceptions.ts` / `discoverModuleLocales.ts` currently use `fs` (D37, debt).
+*Armonia is used in both runtimes and imports no Node built-ins (D37); maestro registers the modules' API error messages at start-up. Dates use dayjs in all three packages (D36).
 
 **Repositories (25):** the roots `armonia`, `maestro`, `sinfonia`, `solfeggio`, plus seven nested module repos in each of the three packages (carRental, dentalClinic, eCommerce, finance, propertyDevelopment, propertyManagement, swissOutreach). `core` lives inside each root repo. The workspace root holds governance + dev tooling and becomes its own repo *(target, D28)*.
 
 ## 2. Modules and dependencies
-Module manifest: `scripts/modules.manifest.json` *(target: maestro core, D01a)*.
+Module manifest: `maestro/modules/core/modules.manifest.json` (D01a).
 ```
 core (required)
 ├── finance ─────────┬── eCommerce
 │                    ├── carRental
 │                    └── dentalClinic
 ├── propertyManagement ── propertyDevelopment
-├── swissOutreach
-└── musicIndustry (empty; removal approved, D31)
+└── swissOutreach
 ```
 - Rules: imports only along these edges (CORE-02); core knows no vertical (CORE-01).
 - Violations today: maestro finance→eCommerce (5), sinfonia PM→PD (2), plus core string references.
@@ -48,11 +47,11 @@ core (required)
 - **Layers:** service (one collection) · actions (record transitions) · utilities. Target layers: `workflows/`, `integrations/`, pure `utilities/` (D49).
 - **Data:**
   - Plugins (ownership/audit/softDelete/lifeCycle). `company` is the tenant key, filtered manually today *(target: auto-scope, D16)*.
-  - Schema ACL via SchemaGuard (field `self/others` read/write, model `create/delete/restore`) *(target: + action permissions, D14)*.
+  - Schema ACL via SchemaGuard (field `self/others` read/write, model `create/delete/restore`) and action permissions (D14).
   - Snippets for populated refs; `relationsRegistry` for delete safety; money as Decimal128; indexes in `*.indexes.ts`.
 - **Errors:** `apiValidationException` → localized `ServerError` (400 by default). Any other `Error` → 500.
 - **Logging:** Winston with daily rotation, hierarchical loggers.
-- **Side effects:** the notification bus is a synchronous in-process EventEmitter; `runAfterCommit` handles post-commit work. PM still emits before commit (debt).
+- **Side effects:** the notification bus is a synchronous in-process EventEmitter. `emitNotificationEvent` waits for the open transaction (the session is in `requestContext`, D06); other post-commit work uses `runAfterCommit`.
 - **Public:** company resolved by origin (portal slug → platform → allowedDomains → wildcard fallback *(target: fail closed, D18)*).
 
 ## 4. Sinfonia (frontend)
@@ -67,19 +66,19 @@ core (required)
 `src/modules/<m>/api/**` holds `*.schema-def.ts`, `*.form.validator.ts` and `*.dto.ts`; `dto/` holds snippet wire types; `helpers/static/exceptions/*.json` holds exception keys. Core also provides `schemaDefBuilder`, `zodBuilder`, `exceptions`, the filter DSL, `shared.types` and the ViewConfig types. There are no imports from maestro or sinfonia.
 
 ## 6. Deployment and environments
-- `solfeggio/deploy.sh` clones the core and module repos by branch per instance, then generates the manifest, env and clusters.
-- `systemUp.sh` builds the images. The maestro image runs `ts-node-dev --transpile-only --watch` *(target: tsc gate, then compiled runtime, D07)*, and its Dockerfile patches armonia's `zodBuilder.ts` with `sed`.
+- `solfeggio/deploy.sh` clones the core and module repos by branch per instance, then generates the env and clusters (the module manifest comes with maestro core).
+- `systemUp.sh` builds the images. Each image builds only if the assembled modules type-check and pass their tests (deploy gate, D07/D08). The maestro image runs the compiled JavaScript with plain node (D106): its `tsc` emit is both the type check and the build.
 - There is no CI and there are no git hooks.
 - Dev profiles: `scripts/dev/arpeggio.mjs`.
 
 ## 7. Architectural invariants
 | Invariant | Enforced today by | Target |
 |---|---|---|
-| Tenant isolation | manual `company` filters | ownershipPlugin auto-scope, fail closed (D16) |
+| Tenant isolation | ownershipPlugin auto-scope, fail closed (D16, D53) | unchanged |
 | Field ACL | SchemaGuard + schemaSanitizer | unchanged |
-| Action authorization | per-action manual checks | core-enforced action permissions (D14) |
-| Soft delete | plugin on find/update | + aggregate hook (D15) |
-| No side effects from rolled-back work | `runAfterCommit` where used | auto-defer in core (D06) |
+| Action authorization | core-enforced action permissions, `actionPermissionMW` (D14, D54) | + declared party `guard` |
+| Soft delete | softDeletePlugin on find/update/aggregate (D15) | + joined collections (TD-B25) |
+| No side effects from rolled-back work | notification events auto-defer (D06); email/Kafka via `runAfterCommit` | core account emails (TD-B27) |
 | Contract parity client/server | shared Armonia factories | + Zod construction check (D11) |
 | Module isolation | convention | boundary check (D02/D03) |
 | Types | sinfonia tsc only | tsc ×3 in verify + deploy gate (D07/D08) |

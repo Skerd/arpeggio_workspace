@@ -2,7 +2,9 @@
 #
 # pushAll.sh — push every Arpeggio repo's current branch to origin.
 #
-# The tree is 21 independent git repos (3 cores + 18 module repos). A feature
+# The tree is 25 independent git repos (4 cores — armonia, maestro, sinfonia,
+# solfeggio — + 21 module repos, 7 verticals in each of the first three), plus the
+# workspace repo itself (governance docs and tooling) once it has a remote. A feature
 # usually spans several of them, so it is easy to push some and forget others —
 # which ships an API without its UI. This walks all of them in one pass.
 #
@@ -46,7 +48,9 @@ for arg in "$@"; do
 done
 
 REPOS=()
-for d in armonia maestro sinfonia \
+# The workspace repo (governance + tooling, D28) once it has a remote; "." is the workspace root.
+git -C "${ROOT}" remote get-url origin >/dev/null 2>&1 && REPOS+=(".")
+for d in armonia maestro sinfonia solfeggio \
          armonia/src/modules/* maestro/modules/* sinfonia/src/modules/*; do
     [ -d "${ROOT}/${d}/.git" ] && REPOS+=("$d")
 done

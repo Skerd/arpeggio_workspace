@@ -26,11 +26,11 @@ Enforcement labels: **check `<name>`** = a mechanical check in root `npm run ver
 
 ### GLB-05 · MUST · Type minimalism
 - **Rule:** See [typescript.md](typescript.md) (TS-01). One identical latest-stable TypeScript version in armonia, maestro and sinfonia. New code is written as if `strictNullChecks` + `noImplicitAny` apply everywhere.
-- **Why:** D07. **Enforce:** check `tsc` ×3 ★ (today only sinfonia's typecheck is real; maestro's TS 4.8 check is vacuous).
+- **Why:** D07. **Enforce:** `npm run typecheck` (armonia, sinfonia, maestro; all on TypeScript 5.9.3 and at 0 errors since 2026-11-04).
 
 ### GLB-06 · MUST NOT · No data migrations unless asked
 - **Rule:** The platform launches on a fresh database. Carry schema changes in schema + SchemaDef + `*.defaults.ts` / demo seeds / default-role grants, and make sure dev `reset` profiles show them. Do not write migration scripts unless the architect asks.
-- **Why:** D19. Existing `maestro/scripts/migrations/*` and root `scripts/migrate-*` are leftovers (see TECHNICAL_DEBT). **Enforce:** review.
+- **Why:** D19. The leftover migration scripts were removed on 2026-11-04. **Enforce:** review.
 
 ### GLB-07 · MUST · Definition of done for a new field
 - **Rule:** In the same change, update all of the following:
@@ -42,18 +42,19 @@ Enforcement labels: **check `<name>`** = a mechanical check in root `npm run ver
 
 ### GLB-08 · MUST · Money
 - **Rule:** Store money as `Decimal128` with its currency. Do all arithmetic through the one core money helper using exact scaled integers. Never do float math on amounts. Round once, at defined points (line, tax, document total), to the currency's precision.
-- **Current state:** the core helper does not exist yet (roadmap P3). PM's bigint helpers in `maestro/modules/propertyManagement/utilities/lease/rentRemaining.ts` (`moneyToScaled`, `scaledToDecimal128`, `moneyNumber`) are the base it will be promoted from. Until then, reuse those or the module's existing scaled helper, and never `roundMoney` float sums.
+- **The helper (D35, built 2026-11-05):** `armonia/src/modules/core/helpers/money.ts`, shared by maestro and sinfonia. Amounts are `bigint` minor units at the currency's `decimalPlaces` (default 2): `toMinor`, `fromMinor`, `sumMinor`, `multiplyMinor`, `percentOfMinor`, `includedPercentOfMinor` (VAT inside a gross price), `allocateMinor` (splits that add up exactly), `prorateMinor` (× factors ÷ divisor, e.g. interest over days). Code that keeps JS numbers uses `addMoney`, `subtractMoney`, `multiplyMoney`, `percentOfMoney`, `roundToCurrency`. Rounding is half away from zero, once. maestro converts to stored `Decimal128` with `decimal128FromMinor` (`maestro/modules/core/utilities/helpers/money.ts`); Stripe amounts come from finance `toStripeAmount`.
+- **Rollout:** done in finance, carRental, dentalClinic and propertyManagement (its lease helpers in `rentRemaining.ts` are built on it; payment-plan interest is one shared function, `armonia/src/modules/propertyManagement/helpers/paymentPlanInterest.ts`, used by the server and the sale form preview) and propertyDevelopment, and eCommerce (online sales: each tax rate rounded once so the total is the sum of the breakdown; till: POS sales, refunds, cash moves, Z-report, fiscalization; and the browser's POS payment screen and bill split, which use the server's exact rules). **Done 2026-11-05:** no float money math is left; core `roundMoney` is removed. New code MUST use the helper. Hours, days and ratios are not money: never round them with a money helper.
 - **Why:** D35. **Enforce:** review.
 
 ### GLB-09 · MUST · Dates and timezones
 - **Rule:**
   - Instants are UTC `Date`.
   - Calendar values (rental day, appointment date, birthday, due date) are local strings validated by `isLocalDateZod` / `isTimeOfDayZod`, never a midnight-UTC `Date`.
-  - Business rules ("today", expiry, overdue) are evaluated in the company timezone.
+  - Business rules ("today", expiry, overdue) are evaluated in the company timezone: core `companyTimeZone` / `companyTimeZoneOf` (`Company.timezone`, else `SERVER_TIMEZONE`, else UTC, D91). A location with its own timezone (rental location, clinic location) uses that zone for its slots.
   - dayjs (+ utc, timezone, customParseFormat, relativeTime) is the only date library in all packages. Our code never imports date-fns or moment.
-  - Display formatting goes through one core helper (roadmap).
-- **Current state:** sinfonia still has 9 date-fns files and armonia/maestro list moment-timezone (debt, P3).
-- **Why:** D36. **Enforce:** lint restricted-imports ★.
+  - Display formatting goes through the one core helper, sinfonia `core/helpers/general/dateTime.ts`: `formatDate` + `DATE_FORMATS` (`Intl`, calendar days with `timeZone: "UTC"`) and `formatRelativeToNow` (dayjs, the user's language). `DateInput` patterns are dayjs tokens (`YYYY-MM-DD`, `YYYY-MM-DD HH:mm`, `HH:mm`).
+- **Current state (2026-11-05):** done. No date-fns or moment import is left; armonia `zodBuilder` uses dayjs and evaluates "today" in the company timezone; moment-timezone is removed from armonia and maestro, date-fns from sinfonia (react-day-picker still uses it internally, which is allowed).
+- **Why:** D36. **Enforce:** ESLint `no-restricted-imports` (date-fns, moment) in sinfonia, maestro and armonia.
 
 ### GLB-10 · MUST · Documentation duties
 - **Rule:**
@@ -65,7 +66,9 @@ Enforcement labels: **check `<name>`** = a mechanical check in root `npm run ver
 - **MUST NOT:** create ad-hoc markdown (task summaries, audit notes, handoffs) unless asked.
 - **Why:** D44. **Enforce:** review.
 
-### GLB-11 · MUST · Full verify before claiming done
-- **Rule:** Run root `npm run verify` and report its output (counts, failures). Never claim checks passed without running them.
-- **Current state:** `verify` = the six governance checks (`npm run check`) + armonia/sinfonia/maestro tests + armonia/sinfonia typecheck + sinfonia lint. Still missing (P1): maestro typecheck (needs the TS upgrade) and the ★ lint rules.
+### GLB-11 · MUST · Verify before claiming done
+- **Rule:** Run the verify and report its output (counts, failures). Never claim checks passed without running them. Two tiers (D135):
+  - **Before a commit:** at least `npm run verify -- --changed`. It runs the governance checks and lint, the typecheck of each touched package, and the tests of each touched module plus the modules that import it, and falls back to the full run by itself when armonia, a `core` folder, locale or static files, the checks or baselines, a package's dependencies or test/typecheck/lint scripts, or a file outside a module changed. `--plan` prints the steps without running them.
+  - **Full `npm run verify`:** at the end of a multi-lane round or wave, and before a push or deploy.
+- **Current state:** `verify` = the six governance checks (`npm run check`) + armonia/sinfonia/maestro tests + typecheck of all three packages + ESLint for sinfonia, maestro and armonia (one baseline). The solfeggio images re-run typecheck + tests on the assembled modules (deploy gate, 2026-11-06). P1 is complete.
 - **Why:** D08. **Enforce:** the gate itself.

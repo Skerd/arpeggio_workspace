@@ -26,8 +26,8 @@ vitest + Testing Library. Forms and sheets: [viewconfig.md](viewconfig.md).
   - Components call the API through the `withAxios` HOC. Where a HOC doesn't fit (custom hooks), use `useHttpRequest`. Direct `apiClient` (`src/modules/core/helpers/apiClient/apiClient.ts`) only inside core helpers/hooks.
   - **MUST NOT:** add another axios instance or raw `fetch`. The only allowed exceptions are `core/helpers/media/fetchMediaBytes.ts`, `clients/studio/source/sourceClient.ts` (dev) and `publicChatClient.ts` (pending review).
   - Session expiry is handled by `apiClient` dispatching `markSessionExpired`. Never `window.location` on 401/403.
-- **Current state:** 138 files call `apiClient` directly (44 inside `useEffect`). This is debt, fixed under AGT-06 scope.
-- **Why:** D09. **Enforce:** lint restricted-imports (axios) ★ + review.
+- **Current state:** 176 files outside core helpers call `apiClient` directly, 5 import axios at runtime, 1 calls `fetch` (all frozen in the lint baseline: debt, fixed under AGT-06 scope).
+- **Why:** D09. **Enforce:** sinfonia ESLint `@typescript-eslint/no-restricted-imports` (axios, `apiClient`) + `no-restricted-globals` (fetch), baselined + review.
 
 ### FE-04 · MUST · Access gating
 - **Rule:** Gate UI with `useAccess` (`src/modules/core/helpers/context/accessContext.tsx`). Missing create shows the existing `Forbidden` pattern. Don't re-check the same flag later.
@@ -36,21 +36,21 @@ vitest + Testing Library. Forms and sheets: [viewconfig.md](viewconfig.md).
 ### FE-05 · MUST · Redux allowlist and refresh
 - **Rule:** Redux slices (`src/modules/core/helpers/redux/store/generalStore.ts`) are limited to session, language, notifications, chat, UI chrome and server health (`serverResources`).
 - **MUST NOT:** keep entity data or "please refetch" counters in Redux. Refresh lists via `EntityListRefs` (`replaceRow`/refresh) or `tableUpdateContext`, or a websocket event for cross-tab changes.
-- Debt: `uiSlice` `newCompanyCreated`, `newUserCreated`, `editUser`.
+- Done 2026-11-06: the `uiSlice` refetch counters are gone (users refresh through `useTableUpdate`, the sidebar company switcher through a local reload key).
 - **Why:** D46. **Enforce:** review.
 
 ### FE-06 · MUST · Lazy pages
 - **Rule:** Every panel page is loaded with `React.lazy` from its route contribution, with one Suspense boundary in the core shell. The contribution files themselves stay eagerly globbed.
-- **Current state:** route contributions statically import every page (eCommerce 112, propertyDevelopment 136, propertyManagement 81, carRental 58), so the whole panel ships as one chunk. New pages are lazy now; conversion of existing ones is P4.
+- **Current state:** done (2026-11-06). Every route contribution declares its pages as `const Page = lazy(() => import("…"))`; `src/modules/core/clients/panel/entryPoint/index.tsx` has the one `Suspense` boundary. A new page follows the same line.
 - **Why:** D21. **Enforce:** review.
 
 ### FE-07 · MUST · One UI primitive layer
 - **Rule:**
   - `src/modules/core/components/ui` (shadcn, `components.json`) is the only primitive layer. animate-ui is used only wrapped inside a `components/ui` primitive; features never import it directly.
   - **MUST NOT:** raw interactive HTML in feature code (`<button>`, `<select>`, `<table>`, `<input>`).
-  - Icons: tabler only, plus simple-icons for brand logos. Toasts via `ui/sonner` in every app.
-- **Current state:** duplicate Tooltip/Button/Select, raw `<button>` in 153 files, 4 extra icon libraries (debt).
-- **Why:** D22. **Enforce:** lint `no-restricted-imports`/`no-restricted-syntax` ★.
+  - Icons: tabler only, plus simple-icons for brand logos. Toasts via `ui/sonner` in every app (panel and portal done; PM public and dyeus still import `sonner` directly until their CSS has the shadcn tokens).
+- **Current state:** one Tooltip and one Collapsible (animated, `components/ui/tooltip.tsx` / `collapsible.tsx`, 2026-11-06); no feature imports animate-ui. Raw controls 408 in 187 files and lucide in 710 module files are lint-baselined debt, fixed when touched.
+- **Why:** D22. **Enforce:** sinfonia ESLint `@typescript-eslint/no-restricted-imports` + `no-restricted-syntax` (outside `components/ui`), baselined.
 
 ### FE-08 · MUST · Translations
 - **Rule:**
@@ -59,11 +59,11 @@ vitest + Testing Library. Forms and sheets: [viewconfig.md](viewconfig.md).
   - Exception keys (BE-07) follow the same rule.
   - Moving a component means moving its JSON in 5 locales and its literal. Prefer flattening over relocating.
 - **Current state:** swissOutreach `fr-CH`/`it-CH` folders never match (debt), and missing dictionaries render `---key---` silently.
-- **Why:** D30; memory sinfonia-i18n-path-coupling. **Enforce:** guard test + check `i18n` (dictionary existence and key parity across 5 locales, baselined).
+- **Why:** D30; memory sinfonia-i18n-path-coupling. **Enforce:** guard test + check `i18n` (dictionary existence, key parity across 5 locales, and no value left as the en-US text; baselined). A value that is correct as-is in a locale (brand, code, a word the language shares with English) goes in `scripts/checks/i18n-same-as-english.json` under that locale, or `"*"` for every locale.
 
 ### FE-09 · MUST · Accessibility
-- **Rule:** Public apps (portal shop/clinic/rental, PM public, dyeus) meet WCAG 2.2 AA. The panel meets a baseline: keyboard-operable, labelled controls, visible focus. The jsx-a11y recommended set is `error` in all apps (today 6 rules at `warn`).
-- **Why:** D23. **Enforce:** sinfonia ESLint ★ + review.
+- **Rule:** Public apps (portal shop/clinic/rental, PM public, dyeus) meet WCAG 2.2 AA. The panel meets a baseline: keyboard-operable, labelled controls, visible focus. The jsx-a11y recommended set is `error` in all apps (captions are not required, D76: `media-has-caption` is off; no other finding is left). A clickable element that is not a `Button` spreads `buttonLike(handler)` from `core/helpers/general/a11y.ts`. A modal with its own layout uses `DialogFrame` from `components/ui/dialog.tsx` (Radix focus trap, focus return to the opener, Escape, scroll lock), never a hand-built `div` overlay.
+- **Why:** D23. **Enforce:** sinfonia ESLint (jsx-a11y recommended, errors, baselined) + review.
 
 ### FE-10 · MUST · Forms
 - **Rule:** react-hook-form + `zodResolver` with the **Armonia** schema factory. Never a client-only Zod schema (BE-06). Forms render from ViewConfig whenever a `*.views.ts` exists ([viewconfig.md](viewconfig.md)).

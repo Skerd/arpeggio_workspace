@@ -24,7 +24,7 @@ vertical's use of core. Read [../CORE_USAGE_GUIDE.md](../CORE_USAGE_GUIDE.md) fo
 | Add a **new** seam to core. It must be generic, take **one typed context object**, have a real consumer when added, and come with a core fixture test | **APPROVAL REQUIRED** |
 | Add a feature-specific flag, param or branch to a core component | **MUST NOT** |
 | Add a generic helper to an existing helper module (e.g. a `zodBuilder.ts` validator + locale key) | **MAY** (BE-06) |
-- ❌ `EntityListPageProps` has ~10 header switches (`hideCreate`, `hideHeader`, `headerTitle`, `helpLanguageKey`, `createIcon`, …); consolidating them into a `header` slot plus exported parts is debt. ✅ `renderCard`, `renderSheet`, `afterCreate`, `enrichList` are seams.
+- ✅ `EntityListPage`'s ~10 header switches were replaced by one `header` slot that takes a context object, plus the exported parts `EntityListHeader` and `EntityListCreateButton` (D60, 2026-11-06). ✅ `renderCard`, `renderSheet`, `afterCreate`, `enrichList` are seams.
 - **Why:** D04. **Enforce:** review.
 
 ### CORE-04 · MUST NOT · A seam never replaces a core invariant
@@ -39,13 +39,14 @@ vertical's use of core. Read [../CORE_USAGE_GUIDE.md](../CORE_USAGE_GUIDE.md) fo
 ### CORE-06 · MUST · Module registration
 - **Manifest:**
   - Module dependencies live in **one** manifest.
-  - **Today:** `scripts/modules.manifest.json` (workspace root). It is read by `maestro/modules/core/utilities/modules/enabledModules.ts`, `sinfonia/scripts/enabledModules.ts`, `sinfonia/src/modules/core/helpers/modules/moduleSelection.ts`, `studioModules.ts`, and `solfeggio/deploy.sh` / `systemUp.sh`.
-  - **Approved target (D01a, P3):** move it into maestro core and repoint all readers. Do **not** create per-module `module.json` (a reverted idea).
+  - It is `maestro/modules/core/modules.manifest.json`, versioned with maestro core (D01a, moved 2026-11-05). Readers: `maestro/modules/core/utilities/modules/enabledModules.ts` (`MODULE_MANIFEST_PATH`), `sinfonia/scripts/enabledModules.ts` (`../maestro/…` in the workspace; the sinfonia image copies the file to the same place), and the root checks (`scripts/checks/lib.mjs`). `solfeggio/systemUp.sh` only checks that maestro core carries it.
+  - Do **not** create per-module `module.json` (a reverted idea), and never add a second manifest.
 - **Folders:** use the same folder name under `armonia/src/modules/<m>/`, `maestro/modules/<m>/`, `sinfonia/src/modules/<m>/`.
 - **Maestro:**
   - `database/moduleBootstrap.ts` exports `moduleBootstrap` (models, optional `defaultRoles`). Never hardcode models in `maestro/initializer/index.ts`.
   - HTTP files live under `api/` and export `basePath` + `router`. They are discovered by `routeRegistry.ts`; never `app.use` them in `apiServer.ts`.
   - Cron: `utilities/cron/` exports `register*CronHandlers`. Kafka: `kafka/` exports `start*KafkaConsumer(s)`.
+  - Discovery loaders match files with `isModuleCodeFile` / `moduleCodeFile` / `withoutModuleExtension` (`modules/core/utilities/modules/moduleCodeFiles.ts`) and never hard-code `.ts` (D106).
 - **Sinfonia:**
   - Panel UI mounts only through `clients/panel/<kind>Contribution.tsx`. There are 12 kinds: sidebar, routeConfig, widget, tenancySettings, siteRoom, accountNav, accountSettings, authPanel, panelLayout, menuLanguage, rolesPermissions, plus portal (`clients/portal/portalContribution.tsx`).
   - Never edit core `routeConfig.tsx` or the core sidebar to mount a feature.

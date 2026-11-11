@@ -9,7 +9,7 @@ alwaysApply: true
 - **CORE-02** Cross-module imports only along manifest `dependsOn` edges (runtime, `import type`, seeds, tests).
 - **CORE-03** Seams, not switches: plug into existing seams freely; a new seam needs approval; never add a feature-specific flag/branch to core.
 - **CORE-04** Hooks add to core invariants (auth, ACL, tenancy, relation safety, transaction, soft delete); never replace them.
-- **CORE-06** Manifest is `scripts/modules.manifest.json` today (target: maestro core); no per-module `module.json`. `moduleBootstrap.ts`, route discovery via `routeRegistry.ts`, sinfonia `<kind>Contribution.tsx`, `ENABLED_MODULES`/`VITE_ENABLED_MODULES`, `npm run sync:module-aliases`.
+- **CORE-06** Manifest is `maestro/modules/core/modules.manifest.json` (D01a); no per-module `module.json`. `moduleBootstrap.ts`, route discovery via `routeRegistry.ts`, sinfonia `<kind>Contribution.tsx`, `ENABLED_MODULES`/`VITE_ENABLED_MODULES`, `npm run sync:module-aliases`.
 
 @docs/architecture/rules/core.md
 @docs/architecture/CORE_USAGE_GUIDE.md

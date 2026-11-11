@@ -15,7 +15,7 @@ The mandatory protocol for every meaningful task. Rule references point into [ru
 | 8 | Plan the minimal correct change | Smallest change that fully works; definition of done (GLB-07) for schema changes; no migrations (GLB-06). |
 | 9 | Implement | Copy the canonical, no unrequested expansion, debt only per AGT-06. |
 | 10 | Verify correctness | Tests per TST-01..03 (regression test for bug fixes). |
-| 11 | Run checks | Root `npm run verify` (GLB-11). It runs the governance checks first (`npm run check`, about 1 s). Until maestro's TS upgrade lands, also run `sinfonia/node_modules/.bin/tsc -p maestro --noEmit` and note new errors in touched files. |
+| 11 | Run checks | `npm run verify -- --changed` for a change before its commit; the full root `npm run verify` at the end of a multi-lane round and before a push (GLB-11, D135). The full run: governance checks (about 1 s), all test suites, typecheck of all three packages and lint, run side by side by `scripts/verify.mjs` (target about 3 min; see TESTING_STANDARDS.md "Keeping verify fast"). |
 | 12 | Live verification | TST-07: API against a dev profile + DB effect; UI click-through incl. empty, error and permission-denied cases. See `.claude/skills/verify/SKILL.md`. |
 | 13 | Review the diff | Every nested repo touched; no debug code, no unrelated churn, no apiServer debug connects. |
 | 14 | Identify unintended changes | Formatting rewrites, regenerated `tsconfig.json` (sinfonia vite rewrites module paths), lockfile churn. |

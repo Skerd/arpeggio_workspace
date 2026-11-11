@@ -39,8 +39,8 @@ Start here for every task (AGT-12). The text in `docs/architecture/` is canonica
 ## Enforcement status
 - **Mechanical today (root `npm run verify`):**
   - Governance checks in `scripts/checks/`: `check:boundaries`, `check:plugins`, `check:zod`, `check:model-access`, `check:i18n`, `check:governance`. Existing debt is frozen in `scripts/checks/baselines/`, so only **new** violations fail.
-  - armonia + sinfonia `tsc`, sinfonia ESLint (generic), the `withLanguagePaths` guard test, and the armonia/sinfonia/maestro test suites.
-- **Planned (P1, marked ★ in the rules):** maestro `tsc` (blocked on the TypeScript upgrade approval), ESLint for maestro/armonia, the stricter sinfonia lint rules, and the deploy gate.
+  - `tsc` for armonia, sinfonia and maestro (one TypeScript version, 0 errors), ESLint for sinfonia, maestro and armonia (errors baselined in one file), the `withLanguagePaths` guard test, and the armonia/sinfonia/maestro test suites.
+- **Deploy gate (D08):** the solfeggio images re-run the typecheck and the tests on the modules assembled for the instance; an error stops the build.
 - **Baselines:** after fixing debt, run `node scripts/checks/run.mjs --update-baseline` to shrink them. Never re-freeze to accept a new violation without architect approval.
 - **Review only:** seam-vs-switch judgment, layer placement, snapshot correctness, ask-vs-act, live-verification evidence, report shape.
 

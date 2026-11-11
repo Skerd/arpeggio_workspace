@@ -22,7 +22,7 @@ Labels: **VERIFIED** (seen in code) · **DOCUMENTED** (docs only) · **INFERRED*
 - VERIFIED: `runAfterCommit` is used 23 times (carRental, dentalClinic, eCommerce, finance). PM emits notifications before commit.
 - VERIFIED: actions get no automatic model-permission check. PM `reservation.cancel` uses a field-write check as the permission and returns a misleading error.
 - VERIFIED: the server context travels in `req.body`. `validateFormZod` keeps raw client keys, and no reserved-key stripping exists.
-- VERIFIED: public company resolution falls back to a wildcard/platform company. Two host resolvers exist.
+- VERIFIED: public company resolution fell back to a wildcard/platform company (fixed by D18). CORRECTION: "two host resolvers" was wrong; `siteHost.ts` builds site hosts, it does not resolve them.
 - VERIFIED: `softDeletePlugin` doesn't cover `aggregate`; 12 aggregate files lack `deletedAt`.
 - VERIFIED: TS 4.8.4, non-strict. `tsc` is vacuous (stops on zod 4 `.d.cts` parse errors). TS 5.9 finds 242 errors (PD 158, PM 37, core 23, eCommerce 10, scripts 5, swissOutreach 4, finance 4, carRental 1).
 - VERIFIED: 188 `console.*` calls. Logger is Winston `serverLog.ts`.
@@ -55,7 +55,7 @@ Labels: **VERIFIED** (seen in code) · **DOCUMENTED** (docs only) · **INFERRED*
 - VERIFIED: `strict: true`, TS 5.9.3, 6 tests, never run by root `verify`.
 
 ## Cross-cutting
-- CONFLICT: the modules rule required `module.json` (none exist); the real manifest is `scripts/modules.manifest.json`, which is unversioned.
+- CONFLICT: the modules rule required `module.json` (none exist); the real manifest was the root `scripts/` copy, which was unversioned (moved to `maestro/modules/core/modules.manifest.json` on 2026-11-05, D01a).
 - CONFLICT: dependency edges: maestro finance→eCommerce (5), sinfonia PM→PD (2), core string references to verticals.
 - VERIFIED: money is Decimal128 in 139 files, with several arithmetic helper sets. Dates: dayjs (101 files), date-fns (9), moment-timezone (1).
 - VERIFIED: migrations live in two places with three safety conventions. Leftovers per D19.

@@ -27,9 +27,9 @@ export function walk(dir, accept) {
 export const isSource = name => /\.(ts|tsx|mts|mjs)$/.test(name) && !name.endsWith(".d.ts");
 export const isTestPath = p => /\/_tests?\//.test(p) || /\.test\.(ts|tsx)$/.test(p);
 
-/** Manifest: today scripts/modules.manifest.json (D01a moves it into maestro core). */
+/** The one module manifest, in maestro core (D01a). */
 export function loadManifest() {
-    const manifest = JSON.parse(read(path.join(ROOT, "scripts/modules.manifest.json")));
+    const manifest = JSON.parse(read(path.join(ROOT, "maestro/modules/core/modules.manifest.json")));
     const deps = {};
     const resolve = (name, seen = new Set()) => {
         for (const dep of manifest[name]?.dependsOn ?? []) {

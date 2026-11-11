@@ -1,5 +1,5 @@
 {
-  "_comment": "DB-01 / D12. Each entry: {\"skip\": {plugin: reason}, \"note\": why}. Pairings are fixed: ownership <- no-tenant, softDelete <- ttl-expiry, audit <- machine-writes. lifeCycle has no exemption reason.",
+  "_comment": "DB-01 / D12. Each entry: {\"skip\": {plugin: reason}, \"note\": why}. Pairings are fixed: ownership <- no-tenant, softDelete <- ttl-expiry, idempotency-claim (D69) or by-design-hard-delete (D73), audit <- machine-writes. lifeCycle has no exemption reason. A file that defines several models keys each one as <file>#<Model>.",
   "maestro/modules/core/database/schemas/cronLock/cronLock.ts": {
     "skip": {
       "ownership": "no-tenant",
@@ -80,8 +80,76 @@
   },
   "maestro/modules/core/database/schemas/user/user.ts": {
     "skip": {
-      "ownership": "no-tenant"
+      "ownership": "no-tenant",
+      "softDelete": "by-design-hard-delete"
     },
-    "note": "Users span companies (architect, D12)."
+    "note": "Users span companies (architect, D12). Users are never deleted; access is deactivated per company role, account deletion is a separate platform step (D57, D73)."
+  },
+  "maestro/modules/finance/database/schemas/paymentWebhookEvent/paymentWebhookEvent.ts": {
+    "skip": {
+      "ownership": "no-tenant",
+      "softDelete": "idempotency-claim",
+      "audit": "machine-writes"
+    },
+    "note": "Provider webhook idempotency claims: no company, written by the webhook handler, and release() must hard-delete a failed claim so the unique index frees it for the provider's redelivery (D69)."
+  },
+  "maestro/modules/core/database/schemas/auditLog/auditLog.ts": {
+    "skip": {
+      "audit": "machine-writes",
+      "softDelete": "by-design-hard-delete"
+    },
+    "note": "The audit trail itself: auditing it would recurse, and it is append-only (erasure blanks values in place, D57) (D73)."
+  },
+  "maestro/modules/core/database/schemas/channel/channel.ts": {
+    "skip": {
+      "softDelete": "by-design-hard-delete"
+    },
+    "note": "Chat channels are hidden per user and hard-deleted by design (D73)."
+  },
+  "maestro/modules/core/database/schemas/message/message.ts": {
+    "skip": {
+      "softDelete": "by-design-hard-delete"
+    },
+    "note": "Chat messages are hidden per user and hard-deleted by design (D73)."
+  },
+  "maestro/modules/core/database/schemas/lastChannelReadMessage/lastChannelReadMessage.ts": {
+    "skip": {
+      "ownership": "no-tenant",
+      "softDelete": "by-design-hard-delete"
+    },
+    "note": "Per-user read marker: derived state, the company comes from the channel (D73)."
+  },
+  "maestro/modules/core/database/schemas/rolePermission/rolePermission.ts": {
+    "skip": {
+      "ownership": "no-tenant",
+      "softDelete": "by-design-hard-delete",
+      "audit": "machine-writes"
+    },
+    "note": "Global permission catalog shared by every company, pruned by the boot sync (TD-T13) (D73). Written only by the boot sync; the company-scoped audit log cannot record it."
+  },
+  "maestro/modules/carRental/database/schemas/rentalSearchStat/rentalSearchStat.ts": {
+    "skip": {
+      "audit": "machine-writes"
+    },
+    "note": "Per-company search counters, upserted by the public search."
+  },
+  "maestro/modules/propertyManagement/database/schemas/dashboardCache/dashboardCache.ts": {
+    "skip": {
+      "audit": "machine-writes",
+      "softDelete": "ttl-expiry"
+    },
+    "note": "Computed dashboard cache; TTL index on computedAt (3600 s)."
+  },
+  "maestro/modules/swissOutreach/database/schemas/pipelineRunLog/pipelineRunLog.ts": {
+    "skip": {
+      "audit": "machine-writes"
+    },
+    "note": "Pipeline step log written by the orchestrator."
+  },
+  "maestro/modules/finance/database/schemas/invoice/invoice.ts#InvoiceCounter": {
+    "skip": {
+      "audit": "machine-writes"
+    },
+    "note": "Per-company invoice number counter, upserted with $inc inside each invoice issue; the issued invoice carries the audit entry."
   }
 }

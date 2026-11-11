@@ -15,18 +15,22 @@ rules in [security.md](security.md).
 | Generic reusable helpers (money→decimal, formatting, pure computations) | `utilities/` | **pure: no DB, no side effects** |
 | HTTP wiring | `api/**` route files + crud hooks | validation, auth and delegation only, no business rules inline |
 - **Current state:** `utilities/services/*` holds full multi-trigger logic: `eCommerce/.../posService.ts` 1,493 lines, `carRental/.../rentalLifecycle.ts` 851, `checkoutPlacementService.ts` 550. This is catalogued debt. New code follows the table, and existing files migrate only under AGT-06 scope.
-- **Why:** D05, D49. **Enforce:** review.
+- **Why:** D05, D49, D55. **Enforce:** review.
 
-### BE-02 · MUST · Non-HTTP triggers invoke actions through the pipeline
-- **Rule:** When cron, a webhook, a storefront route or a `my*` customer route needs a one-entity transition, it calls the action through the core `invokeAction(model, action, payload, actor)` seam. That seam runs the same pipeline as HTTP (permission SEC-02, Zod, transaction, after-commit) with a system or customer actor.
-- **MUST NOT:** call `new XActions().method(...)` directly; that skips auth, Zod and the transaction (the decorator only records metadata, `maestro/modules/core/api/actionDecorator.ts:49-64`).
-- **Interim (seam not built yet, P3):** for a *new* multi-trigger transition, stop and ask (AGT-01d). Keep existing shared-service call sites as they are.
-- **Why:** D49. **Enforce:** review.
+### BE-02 · MUST · One transition, one function; every trigger wraps it with its own checks
+- **Rule:** A transition that several triggers start lives in **one** function: a service function next to the entity, or a `workflows/` flow when it spans entities. Each trigger is a thin wrapper that adds only its own access check and input:
+  - **staff:** the `@action` (permission SEC-02, Zod `schema`, `transaction: true`). Exception (D97): an action that must call an external service with the transaction's result (POS `pay` → CIS) owns its transaction with `runInTransaction` and makes the external call after it commits;
+  - **customer:** the `my*` or storefront route (`authMW`, `validateFormZod`, `transactionHandler`, plus an ownership or manage-token check);
+  - **system:** the cron handler or webhook, through `runInTransaction`, which carries the tenant and after-commit timing (D16, D06).
+- ✅ `cancelRentalReservation` (`maestro/modules/carRental/workflows/rentalLifecycle.ts`): staff `cancel` action, `myRentalReservation` route and storefront manage route; `expireRentalHold` from the hold-expiry cron.
+- **MUST NOT:** call `new XActions().method(...)` from another trigger: that skips auth, Zod and the transaction (the decorator only records metadata, `maestro/modules/core/api/actionDecorator.ts`). Nothing does today. **MUST NOT** run a non-request transaction with a bare `session.withTransaction` that queues after-commit work without flushing it (use `runInTransaction`).
+- **Deferred (D55):** the `invokeAction(action, payload, actor)` seam is built only when a trigger first needs to run an action's own body; none does.
+- **Why:** D49, D55. **Enforce:** review.
 
 ### BE-03 · MUST · Routes
 - `createCrudRouter` (`maestro/modules/core/api/crudRouterFactory.ts`) provides the seven verbs: POST `/select`, POST `""` (list), POST `/single`, PUT (create), PATCH (edit), DELETE, PATCH `/restore`. Never hand-write them.
 - A manual `Router` is allowed only for aggregations/dashboards, public catalogs and webhooks. It still uses `authMW`, `validateFormZod` and `asyncHandler` (`maestro/modules/core/utilities/middlewares/`).
-- Lifecycle transitions are `@action` methods exposed as `POST /<methodName>`. **MUST NOT** use PATCH as a state machine. ❌ `core/api/company/private/users.ts` `PATCH /unlockActivation`, `/resend*Email` (debt).
+- Lifecycle transitions are `@action` methods exposed as `POST /<methodName>`. **MUST NOT** use PATCH as a state machine. ✅ `core/database/schemas/user/user.actions.ts` (`unlockActivation`, `resendActivationEmail`, … as `@action`s with `_id` in the body, D65; the old PATCH routes were removed, D74).
 - List filters compile through `dslFilterMW` from the Armonia `FilterGroup`; no second query language.
 - Uploads go through `mediaUploadMW`. Payloads are built with `buildCreateDataFromSchemaDef` / `buildUpdateDataFromSchemaDef`.
 - **Why:** existing maestro-api rule (verified). **Enforce:** review.
@@ -59,10 +63,14 @@ rules in [security.md](security.md).
 
 ### BE-08 · MUST · Side effects never depend on, or outlive, the transaction
 - (a) A side-effect failure never fails or rolls back the business operation: log and fall back. This already holds via `flushAfterCommitTasks`.
-- (b) Notifications, email, WS pushes, Kafka publishes and external HTTP made during a transaction run **after commit** via `runAfterCommit(session, task)` (`maestro/modules/core/utilities/middlewares/transactionUtils.ts`).
-- (c) Approved seam (P3): `emitNotificationEvent` and similar auto-defer when `requestContext` has a session. **Until it ships, call `runAfterCommit` explicitly.**
-- ❌ propertyManagement emits before commit (e.g. `reservation.actions.ts:448`), which is debt.
-- **Why:** D06. **Enforce:** review.
+- (b) Notifications, email, WS pushes, Kafka publishes and external HTTP made during a transaction run **after commit** via `runAfterCommit(session, task)` (`maestro/modules/core/utilities/middlewares/transactionUtils.ts`). A failed request, and every attempt `asyncHandler` replays after a write conflict, drops its queued tasks.
+- (c) **Built (D06, 2026-11-05):** `transactionHandler` and `runInTransaction` put their session in `requestContext`, so:
+  - `emitNotificationEvent` always waits for the open transaction (no call-site change needed);
+  - `runAfterCommit(undefined, task)` waits for the request's transaction too.
+  - Email and Kafka sends are **not** deferred by core: their callers use the outcome (Kafka producers fall back to SMTP); core account emails (invitation, activation, password reset, MFA deactivation) go out after the commit through `sendAccountEmailAfterCommit` and a failure is logged, not answered (D58). A send that follows a write goes in `runAfterCommit` at the call site; a send that *is* the operation (a manual "send email" action that reports `client_has_no_email`) stays in the request.
+  - Code running its own `session.withTransaction` puts nothing in the context: it calls `flushAfterCommitTasks` itself and passes its `session` to `runAfterCommit`.
+- **MUST NOT:** a second after-commit mechanism (propertyManagement's `session.once("ended")` helper was removed: it fired once per retried attempt).
+- **Why:** D06. **Enforce:** `afterCommit.test.ts`; review.
 
 ### BE-09 · MUST · External integrations
 - **Outbound:** calls go through a typed adapter with a timeout and the core circuit breaker (`executeWithCircuitBreaker`).
@@ -85,8 +93,8 @@ rules in [security.md](security.md).
   - Log through `params.logger` (request) or `getLogger(name)` (`maestro/modules/core/loggers/serverLog.ts`).
   - Levels: error = needs attention; warn = degraded but handled; info = business events; debug = dev detail.
   - Request logs carry the request-id.
-  - **MUST NOT:** `console.*` outside `scripts/` and tests (188 existing calls are debt), or logging secrets, tokens, passwords, or full payment/medical payloads.
-- **Why:** D38. **Enforce:** maestro ESLint `no-console` ★.
+  - **MUST NOT:** `console.*` outside `scripts/` and tests (143 existing calls in 84 files are debt, frozen in the lint baseline: TD-B08), or logging secrets, tokens, passwords, or full payment/medical payloads.
+- **Why:** D38. **Enforce:** maestro ESLint `no-console` (root `npm run lint`, existing calls baselined).
 
 ### BE-12 · MUST · Notifications
 - **Rule:** Domain notifications go through `emitNotificationEvent` (`maestro/modules/core/domain/notifications/notificationEventBus.ts`). Never a parallel event bus.
