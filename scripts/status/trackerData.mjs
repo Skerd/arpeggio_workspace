@@ -56,8 +56,8 @@ function roadmap() {
 
 /** Tenant scoping (D16): enforced unconditionally in every module since 2026-11-04 (D53). Launch modules per D32. */
 function tenantScope() {
-    const launch = new Set(["propertyManagement", "propertyDevelopment", "eCommerce", "finance", "carRental", "dentalClinic"]);
-    const modules = ["carRental", "dentalClinic", "eCommerce", "finance", "propertyManagement", "propertyDevelopment", "swissOutreach"];
+    const launch = new Set(["propertyManagement", "propertyDevelopment", "eCommerce", "marketplace", "finance", "carRental", "dentalClinic"]);
+    const modules = ["carRental", "dentalClinic", "eCommerce", "finance", "marketplace", "propertyManagement", "propertyDevelopment", "swissOutreach"];
     return modules.map((module) => ({module, launch: launch.has(module) ? "launch" : "later", status: "enforced"}));
 }
 

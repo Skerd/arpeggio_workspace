@@ -24,12 +24,14 @@
         "dev:ecommerce": "node scripts/dev/arpeggio.mjs up ecommerce",
         "dev:carRental": "node scripts/dev/arpeggio.mjs up carRental",
         "dev:dentalClinic": "node scripts/dev/arpeggio.mjs up dentalClinic",
+        "dev:marketplace": "node scripts/dev/arpeggio.mjs up marketplace",
         "dev:propertyManagement": "node scripts/dev/arpeggio.mjs up propertyManagement",
         "dev:all": "node scripts/dev/arpeggio.mjs up all",
         "dev:list": "node scripts/dev/arpeggio.mjs list",
         "reset:ecommerce": "node scripts/dev/arpeggio.mjs reset ecommerce",
         "reset:carRental": "node scripts/dev/arpeggio.mjs reset carRental",
         "reset:dentalClinic": "node scripts/dev/arpeggio.mjs reset dentalClinic",
+        "reset:marketplace": "node scripts/dev/arpeggio.mjs reset marketplace",
         "reset:propertyManagement": "node scripts/dev/arpeggio.mjs reset propertyManagement",
         "reset:all": "node scripts/dev/arpeggio.mjs reset all"
     }

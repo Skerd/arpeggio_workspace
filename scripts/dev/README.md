@@ -26,10 +26,11 @@ The maestro and sinfonia halves of one profile can run in separate terminals, e.
 
 | profile | modules | database | Redis DB | Kafka prefix | API / WS | panel | public app |
 |---|---|---|---|---|---|---|---|
-| ecommerce | core, eCommerce | xCloud-eCommerce | 0 | — | 81 / 82 | 5173 | portal `ecommerce.localhost:5174` |
+| ecommerce | core, eCommerce, marketplace | xCloud-eCommerce | 0 | — | 81 / 82 | 5173 | portal `ecommerce.localhost:5174` |
 | carRental | core, carRental | xCloud-carRental | 2 | `carRental-` | 91 / 92 | 5181 | portal `carrental.localhost:5182` |
 | dentalClinic | core, dentalClinic | xCloud-dentalClinic | 3 | `dentalClinic-` | 101 / 102 | 5191 | portal `dentalclinic.localhost:5192` |
 | propertyManagement | core, propertyManagement, propertyDevelopment | xCloud-propertyManagement | 4 | `propertyManagement-` | 111 / 112 | 5201 | public :5202 |
+| marketplace | core, marketplace | xCloud-marketplace | 6 | `marketplace-` | 131 / 132 | 5221 | portal `marketplace.localhost:5222` |
 | all | every module (`ENABLED_MODULES=` empty) | xCloud-all | 5 | `all-` | 121 / 122 | 5211 | portal `portal.localhost:5212` |
 
 `dependsOn` modules (e.g. finance) are added automatically. Log in to any panel as `echo@echo.com` / `echo`.
