@@ -32,7 +32,7 @@ function roadmap() {
     const rows = [];
     let phase = "";
     for (const line of read("docs/architecture/OPTIMIZATION_ROADMAP.md").split("\n")) {
-        const heading = line.match(/^## (P\d)[: ]\s*(.*)$/);
+        const heading = line.match(/^## (P\d+)[: ]\s*(.*)$/);
         if (heading) phase = `${heading[1]} ${heading[2]}`.trim();
         else if (line.startsWith("## ")) phase = "";
         if (!phase || !isTableRow(line)) continue;
