@@ -206,6 +206,7 @@ to schedule it.
 | TD-M05 | ~~Replace-style seams~~ FIXED 2026-11-06: core always checks restore permission before an override, and runs relation safety after delete hooks in the same transaction (D66, D72) | — | Done | CORE-04 |
 | TD-M06 | ~~Header switch cluster~~ FIXED 2026-11-06: D60: one `header` slot + `EntityListHeader` / `EntityListCreateButton`, all 150 list pages migrated, old props removed (`_tests/entityListPage.header.test.tsx`) | — | Done | CORE-03 |
 | TD-M07 | ~~Armonia Node built-ins~~ FIXED 2026-11-05 (D37): core API messages are static JSON imports; maestro `loadModuleExceptionLocales` (servers at start-up, test setup) registers the modules' messages; `zodBuilder` checks cron expressions with armonia `isValidCronExpression` (tested against `CronTime`) instead of importing `cron` (dependency removed from armonia). `moment-timezone` later removed with D36 | — | Done | D37 |
+| TD-M08 | finance's escrow list names the marketplace's collection, `$lookup from: "orders"`, a string reference to a module finance has no edge to. It becomes visible once the marketplace is its own module (D142; found 2026-11-11) | `maestro/modules/finance/api/finance/private/escrowTransaction.ts:297,355` | The marketplace registers the label lookup for its escrow source type (`marketplaceOrder`) with finance, the way `registerPaymentSourceHandler` works; finance stops naming the collection. Planned in P11.3 if small, else after P11 | CORE-02 |
 
 ## Frontend / sinfonia
 | ID | Debt | Where | Defined fix | Rule |
