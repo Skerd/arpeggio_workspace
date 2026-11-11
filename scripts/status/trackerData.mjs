@@ -61,7 +61,7 @@ function tenantScope() {
     return modules.map((module) => ({module, launch: launch.has(module) ? "launch" : "later", status: "enforced"}));
 }
 
-/** Catalogued debt: open unless struck through or marked fixed/removed/done. */
+/** Catalogued debt: open unless struck through or marked fixed/removed/done; "future" when its fix column starts with Future (postponed). */
 function debt() {
     const rows = [];
     let area = "";
@@ -69,9 +69,10 @@ function debt() {
         const heading = line.match(/^## (.*)$/);
         if (heading) area = heading[1].trim();
         if (!line.startsWith("| TD-")) continue;
-        const [id, what, where = ""] = rowsOf(line);
+        const [id, what, where = "", fix = ""] = rowsOf(line);
         const closed = /~~|\b(FIXED|REMOVED)\b/.test(what);
-        rows.push({id, area, debt: plain(what).replace(/^(FIXED|REMOVED) \S+:?\s*/, ""), where: plain(where), status: closed ? "fixed" : "open"});
+        const status = closed ? "fixed" : /^Future\b/.test(fix.trim()) ? "future" : "open";
+        rows.push({id, area, debt: plain(what).replace(/^(FIXED|REMOVED) \S+:?\s*/, ""), where: plain(where), status});
     }
     return rows;
 }
