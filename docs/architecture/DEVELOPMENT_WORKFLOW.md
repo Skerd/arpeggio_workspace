@@ -31,6 +31,7 @@ The mandatory protocol for every meaningful task. Rule references point into [ru
 - [ ] Outcome proven live at every touched layer (AGT-10, TST-07)
 - [ ] Tests added per TST-01..03, `npm run verify` green, output in the report
 - [ ] GLB-07 chain complete for schema changes (contract, UI, 5 locales, seeds/defaults/roles)
+- [ ] UI changes pass the [rules/ux.md](rules/ux.md) checklist (UX-01..UX-12) on every card, table, sheet and form touched
 - [ ] No new rule violations; debt fixed only per AGT-06, new debt logged
 - [ ] README / ADR / TECHNICAL_DEBT updated where GLB-10 requires
 - [ ] Report in AGT-09 shape; approvals requested, not assumed

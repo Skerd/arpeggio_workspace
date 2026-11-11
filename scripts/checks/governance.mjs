@@ -29,7 +29,7 @@ export function run() {
 
     for (const [file, t] of Object.entries(texts)) {
         const r = rel(file);
-        for (const m of t.matchAll(/\b(GLB|CORE|BE|DB|SEC|FE|TST|OPT|AGT|TS|VC|SNP)-(\d{2})\b/g)) {
+        for (const m of t.matchAll(/\b(GLB|CORE|BE|DB|SEC|FE|TST|OPT|AGT|TS|VC|SNP|UX)-(\d{2})\b/g)) {
             if (!defined.has(`${m[1]}-${m[2]}`)) errors.push(`${r}: rule ${m[1]}-${m[2]} is not defined`);
         }
         for (const m of t.matchAll(/\b(D\d{2}a?)\b/g)) {

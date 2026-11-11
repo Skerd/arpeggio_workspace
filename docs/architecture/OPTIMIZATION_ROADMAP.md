@@ -90,3 +90,19 @@ Module test coverage (D24) is done for every launch module and swissOutreach (20
 | Panel session company timezone (TD-B140) | S3 | M | H | L | S | seam | **Done 2026-11-10:** built as planned (also the installment and rent email buttons): the session company carries `timezone`; sinfonia passes it to factories and counts reservation/rent days with it (`manualReservationClientEmails.tsx`, `reservationCard.tsx`) |
 | propertyManagement calendar days → local strings (D115) | S2 | M | H | M | M-L | seam | **Done 2026-11-10:** 33 fields (see D115); planned as: ~15 calendar fields (installment and plan due/start/end dates, sale/reservation/payment dates, lease and rent due dates, expected completion) through SchemaDef, Mongoose, DTOs, views, filters, seeds, crons and every comparison; copy dentalClinic `clinicLocation`/`clinicInquiry` |
 | propertyDevelopment calendar days → local strings (D115) | S2 | M | H | M | L | PM row | **Done 2026-11-10:** 36 fields in 24 entities (see D115); planned as: ~25-30 calendar fields (planned start/end, claim periods, due and expiry dates, warranty ends, retention release, revision dates) the same way; drop the 17 copied `new Date(v)` transforms |
+
+## P8: Dental clinic UX (D136)
+| Item | Sev | Impact | Conf | Risk | Effort | Deps | Action |
+|---|---|---|---|---|---|---|---|
+| P8.0 UI rule (UX-01..UX-12) | S2 | H | H | L | S | — | **Done 2026-11-11:** `rules/ux.md` with checklist, README routing row, definition-of-done line, D136, TD-F54, governance check validates `UX-*` citations |
+| P8.1 Bugs and dead controls | S2 | H | H | L | S | P8.0 | Planned: appointment sheet owns its lifecycle menu (no dead Edit), same fix in carRental reservations; no "eur" fallback in clinic payments; manage page uses the booking's currency; thread times via GLB-09 helpers; settings breadcrumb; appointments "When" quick filter |
+| P8.2 Currency everywhere | S2 | H | H | L | M | P8.1 | Planned: clinic currency on treatment DTOs; amounts with currency on every dental card, sheet, table and form; "Prices & payments" settings section with a change warning |
+| P8.3 Titles, cards, tables | S2 | H | H | L | M | P8.2 | Planned: names as titles with code badges; card anatomy per UX-02; table column order and hidden technical columns; one noun per entity in 5 locales |
+| P8.4 Forms | S2 | H | H | M | M | P8.3 | Planned: every dental form grouped with a Visibility group; generated slug; context defaults; folder-first new appointment; time off reason, all-day and who-choice; quote phase picker and price-list-first lines |
+| P8.4b Workflows | S2 | H | H | M | M | P8.4 | Planned: staff accept a quote (walk-in, phone, single-clinic only); write a quote from a request; editable time-off dates with the clash check |
+| P8.5 Sheets and patient hub | S2 | H | M | M | L | P8.4b | Planned: approved widget tokens; patient hub (alerts, summary, related lists); plan and request content above Lifecycle; `#WeeklyHours` for team and locations |
+| P8.6 Interactive day view | S2 | H | M | M | M | P8.1 | Planned: open on click, book from an empty slot, drag to reschedule, status tones, now-line, full hours, all locations |
+| P8.7 Demo seeds | S3 | M | H | M | M | P8.5 | Planned: richer Blloku Dental data; scoped wipe and dental-only seed after approval (AGT-07) |
+| P8.8 Portal currency | S3 | M | H | L | S | P8.2 | Planned: price sort and filter only within one currency, dental and carRental |
+| P8.9 Clinic site and portal polish | S3 | M | H | L | M | P8.7 | Planned: `/dentists` deep link, treatment wording in search, Free/duration/Book on cards, slug URLs, translated languages, day reasons, inline time list |
+| P8.10 Final round | S3 | M | H | L | S | all | Planned: portal "My dental cases", Dentist and Front-desk roles, phone width, light mode, full `npm run verify` |

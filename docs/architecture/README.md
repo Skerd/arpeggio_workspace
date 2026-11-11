@@ -19,6 +19,7 @@ Start here for every task (AGT-12). The text in `docs/architecture/` is canonica
 | auth, permissions, tenancy, public routes, sensitive data, AI tools, webhooks | [rules/security.md](rules/security.md) (SEC-*) |
 | sinfonia pages, contributions, HTTP calls, state, UI, i18n, a11y | [rules/frontend.md](rules/frontend.md) (FE-*) |
 | `*.views.ts`, form/sheet pages, viewEngine | [rules/viewconfig.md](rules/viewconfig.md) (VC-*) |
+| what a panel page shows: cards, tables, sheets, forms, filters, money/date display, defaults | [rules/ux.md](rules/ux.md) (UX-*) |
 | `*.snippets.ts`, armonia DTOs, mappers | [rules/snippets.md](rules/snippets.md) (SNP-*) |
 | any `.ts/.tsx` (types, assertions, defensiveness) | [rules/typescript.md](rules/typescript.md) (TS-01) |
 | tests, verification | [rules/testing.md](rules/testing.md) (TST-*) + [TESTING_STANDARDS.md](TESTING_STANDARDS.md) |

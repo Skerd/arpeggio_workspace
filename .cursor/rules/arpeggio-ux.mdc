@@ -1,0 +1,11 @@
+---
+description: What a panel page shows and in which order — card anatomy, sheet order, grouped forms, context defaults, money with currency, natural dates, labels not codes, default sort (UX-*).
+globs: "{maestro/**/*.views.ts,sinfonia/**/cardView/**,sinfonia/**/sheetView/**,sinfonia/**/{create,edit}*.tsx,sinfonia/src/modules/*/clients/panel/private/**/index.tsx}"
+alwaysApply: false
+---
+
+# Pointer
+
+Canonical text: `docs/architecture/rules/ux.md` (D136). Edit it there, not here.
+
+@docs/architecture/rules/ux.md
