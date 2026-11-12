@@ -70,7 +70,7 @@ Reference module: **dentalClinic** (D136). Other modules are brought in line whe
 
 ### UX-07 · MUST · Money is always amount + currency
 - **Rule:**
-  - **Display:** every amount on a card, sheet, table, dialog or public page shows its currency. Use `type: "currency"` with `valuePath: ["<currency>.symbol", "<amount>"]`. Never a bare number, and never the currency in a separate card or column.
+  - **Display:** every amount on a card, sheet, table, dialog or public page shows its currency. Use `type: "currency"` with `valuePath: ["<currency>.symbol", "<amount>"]`; a table column declares `dynamicTableConfiguration.currencyPath` on its schema field (D149). Never a bare number, and never the currency in a separate card or column.
   - **Price types read as words:** "from €60", "Free", "On request".
   - **Inputs:** a money input says which currency it is in.
   - **Totals:** a form that builds a total shows it as you type.
