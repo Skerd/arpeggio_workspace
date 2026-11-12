@@ -94,6 +94,9 @@ function maestroOverrides(profile) {
     const publicHost = (profile.PUBLIC_APP === "portal" && profile.PORTAL_ROOT_DOMAIN) || "localhost";
     if (profile.PUBLIC_APP && profile.PUBLIC_PORT) clientUrls.push(`${profile.PUBLIC_APP}=http://${publicHost}:${profile.PUBLIC_PORT}`);
     env.SINFONIA_CLIENT_URLS = clientUrls.join(",");
+    // Dev sends no real email (TD-B192): turn it on with `EMAIL_ENABLED=true npm run dev -- up <profile>`, or with
+    // EMAIL_ENABLED=true in the profile, which the loop below applies last.
+    env.EMAIL_ENABLED = process.env.EMAIL_ENABLED === "true" ? "true" : "false";
 
     for (const [key, value] of Object.entries(profile)) {
         if (key !== "name" && !LAUNCHER_KEYS.includes(key)) env[key] = value;

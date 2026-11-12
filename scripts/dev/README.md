@@ -46,6 +46,7 @@ The dyeus app (`npm run dyeus` in `sinfonia/`) is not a launcher role. Serve it 
 The launcher also derives some values:
 - **Kafka:** every `KAFKA_TOPIC_*` / `KAFKA_CONSUMER_GROUP_*` in `maestro/.env` gets `<KAFKA_PREFIX>-`. This is the same rule as `solfeggio/deploy.sh`. Consumers create missing topics on start.
 - **URLs:** values in `maestro/.env` that start with `http://localhost:5173` (OAuth and Stripe Connect redirects) are moved to the profile's panel port. `SINFONIA_CLIENT_URLS` becomes `core=<panel>,<app>=<public>` unless the profile sets it.
+- **Email:** off (`EMAIL_ENABLED=false`), so dev never mails demo addresses for real. Turn it on for one run with `EMAIL_ENABLED=true npm run dev -- up <profile>`, or for a profile with `EMAIL_ENABLED=true` in its file.
 - **Vite:**
   - `VITE_ENABLED_MODULES`, `VITE_SINFONIA_APP`;
   - `VITE_API_BASE_URL` / `VITE_WS_BASE_URL`, which point at the profile's API;
