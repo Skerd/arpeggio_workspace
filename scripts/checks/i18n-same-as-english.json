@@ -14,11 +14,11 @@
     "UPC"
   ],
   "de-CH": [
-    "Account sid",
     "Account SID",
+    "Account sid",
     "ACxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
-    "admin",
     "Admin",
+    "admin",
     "Administration",
     "ALB",
     "Apple Maps",
@@ -148,6 +148,7 @@
     "Promotion",
     "Region",
     "Renovation",
+    "Reservation",
     "Revision",
     "RFIs",
     "ROI",
