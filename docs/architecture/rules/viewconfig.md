@@ -86,6 +86,7 @@ Tokens live in `sinfonia/src/modules/core/components/viewEngine/widgetRegistry.t
 | Multi ObjectId | `#FormObjectIdChips` or multi `#ApiSelect` | Edifice constructors; unit `connectedUnits` |
 | String list | `#StringArrayInput` | Edifice facilities |
 | Nested object rows | `#FormRepeater` (`arrayField`, `defaultItem`, `rowTemplate`) | Project `socialLinks` |
+| Pick a row of another repeater | `#Select` with `optionsFromFormArray: {arrayField, labelField}` (stores the 1-based row number, D150) | Dental quote line `phase` |
 | Tabbed nested rows | `#FormTabbedRepeater` | Inspection findings |
 | CRUD media | `#MediaField` | Project / edifice / floor / unit |
 | Local multipart files | `#FormMultiLocalFileField` | Reservation / sale documents |
