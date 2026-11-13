@@ -224,3 +224,10 @@ Module test coverage (D24) is done for every launch module and swissOutreach (20
 | P18.2 Core | S3 | M | H | M | S | P17 | **Done 2026-11-13:** TD-B229's cause found (parallel first reads in a transaction lose it under load; the inspection create reads one after the other now) plus the approved jittered retry delay; `method` gone from the chips input and 73 view props (TD-F100); former staff labelled by `ids` in the users picker (D157) |
 | P18.3 Final round | S3 | M | H | L | S | all | **Done 2026-11-13:** full `npm run verify` 8/8 (maestro 2306, sinfonia 2157, armonia 155 tests; the P17 load failure did not recur); 6 rows closed, 2 found (TD-B230, TD-F103); commits asked for |
 
+## P19: Debt found in P18 (D158)
+| Item | Sev | Impact | Conf | Risk | Effort | Deps | Action |
+|---|---|---|---|---|---|---|---|
+| P19.1 Core transaction start | S2 | H | H | M | S | P18 | **Done 2026-11-13:** core `openTransactionOnServer` opens every request's, replay's and `runInTransaction` attempt's transaction on the server before handler code (TD-B230); isolated experiment 0 lost transactions (was 112–561 per 20 s), load reproduction 212/212 twice, about 0.5–1 ms per transactional request |
+| P19.2 propertyManagement ROI decimals | S4 | L | H | L | S | P18 | **Done 2026-11-13:** ROI sale price, net profit and rent as `RoiMoney` at their currency's decimals in table and PDF (TD-F103) |
+| P19.3 Final round | S3 | M | H | L | S | all | **Done 2026-11-13:** full `npm run verify` 8/8 (maestro 2312, sinfonia 2160, armonia 155 tests); 2 rows closed, 2 found (TD-B231, TD-B232); commits asked for |
+
