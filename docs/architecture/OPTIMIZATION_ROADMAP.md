@@ -217,3 +217,10 @@ Module test coverage (D24) is done for every launch module and swissOutreach (20
 | P17.2 Core | S3 | M | H | L | S | P16 | **Done 2026-11-13:** users, roles and PD approval-role pickers honour `ids` (TD-B225), generic core demo texts with eCommerce seeding its own notice (TD-B226), "is a required field" for an empty enum (TD-F96), Studio without `method` (TD-F98), form pin map settles zooms (TD-F99) |
 | P17.3 Final round | S3 | M | H | L | S | all | **Done 2026-11-13:** full `npm run verify` 7/8: one new maestro test (`inspection.editAndPicker`, six creates on one unit) got a 409 under full-suite load and passes alone 3/3 (TD-B229, core retries without delay); maestro suite rerun 2301/2301; 10 rows closed, 6 found (TD-B227–B229, TD-F100–F102); commits asked for |
 
+## P18: Debt found in P17 (D157)
+| Item | Sev | Impact | Conf | Risk | Effort | Deps | Action |
+|---|---|---|---|---|---|---|---|
+| P18.1 propertyManagement | S3 | M | H | L | S | P17 | **Done 2026-11-13:** ROI rent with its currency and yield only within one currency (TD-B227), start error wording (TD-B228), Cancel/Update checklist on action permissions (TD-F101), chart ticks at the currency's decimals (TD-F102) |
+| P18.2 Core | S3 | M | H | M | S | P17 | **Done 2026-11-13:** TD-B229's cause found (parallel first reads in a transaction lose it under load; the inspection create reads one after the other now) plus the approved jittered retry delay; `method` gone from the chips input and 73 view props (TD-F100); former staff labelled by `ids` in the users picker (D157) |
+| P18.3 Final round | S3 | M | H | L | S | all | **Done 2026-11-13:** full `npm run verify` 8/8 (maestro 2306, sinfonia 2157, armonia 155 tests; the P17 load failure did not recur); 6 rows closed, 2 found (TD-B230, TD-F103); commits asked for |
+
