@@ -231,3 +231,9 @@ Module test coverage (D24) is done for every launch module and swissOutreach (20
 | P19.2 propertyManagement ROI decimals | S4 | L | H | L | S | P18 | **Done 2026-11-13:** ROI sale price, net profit and rent as `RoiMoney` at their currency's decimals in table and PDF (TD-F103) |
 | P19.3 Final round | S3 | M | H | L | S | all | **Done 2026-11-13:** full `npm run verify` 8/8 (maestro 2312, sinfonia 2160, armonia 155 tests); 2 rows closed, 2 found (TD-B231, TD-B232); commits asked for |
 
+## P20: Debt found in P19 (D159)
+| Item | Sev | Impact | Conf | Risk | Effort | Deps | Action |
+|---|---|---|---|---|---|---|---|
+| P20.1 ROI symbol and own transactions | S3 | M | H | L | S | P19 | **Done 2026-11-13:** no borrowed sale symbol in ROI (TD-B231); checkout expiry, background order placement, marketplace auto-complete and the brochure import run through core `runInTransaction` (TD-B232) |
+| P20.2 Final round | S3 | M | H | L | S | P20.1 | **Done 2026-11-13:** full `npm run verify` 8/8; 2 rows closed, none found; only the postponed TD-B184 stays open; commits asked for |
+
