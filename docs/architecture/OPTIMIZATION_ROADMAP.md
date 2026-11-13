@@ -201,3 +201,12 @@ Module test coverage (D24) is done for every launch module and swissOutreach (20
 | P15.4 Permission labels | S4 | L | H | L | M | P14 | **Done 2026-11-13:** 379 field and 2 model labels in 5 locales across 8 modules; 0 missing; roles page checked in each demo company |
 | P15.5 Final round | S3 | M | H | L | S | all | **Done 2026-11-13:** `mongodump` backup of `xCloud-all` (199 collections), reset (the first try was killed with its log monitor and rerun), no PM seed row skipped; full `npm run verify` 8/8 (maestro 2121, sinfonia 2262, armonia 147 tests); 36 debt rows closed, 18 found (TD-B211–B220, TD-F88–F95); commits asked for |
 
+## P16: Debt found in P15 (D155)
+| Item | Sev | Impact | Conf | Risk | Effort | Deps | Action |
+|---|---|---|---|---|---|---|---|
+| P16.1 propertyDevelopment | S3 | M | H | M | S | P15 | **Done 2026-11-13:** a "Bill" item bills one approved variation order through `billVariations` (TD-F84), QR-read invoice amounts show their code (TD-F89), `#CostClassificationSheetView` (TD-F90), BIM `importStatus` dropped (TD-B216); live: one demo order billed and restored |
+| P16.2 propertyManagement | S3 | M | H | M | M | P15 | **Done 2026-11-13:** picker labels in the caller's language (TD-B211, B212), ROI costs per currency (TD-B213), no status through edit (TD-B214), inspection Reschedule action (TD-B215), empty new cost lines (TD-F88); live: a test inspection rescheduled and deleted |
+| P16.3 Core UI and demo seeds | S3 | M | H | L | M | P16.1, P16.2 | **Done 2026-11-13:** translated UI primitives (`UiTexts`), week start from the language, map zoom settled on close, sign-in form props (TD-F92–F95); demo seeds for core users, escrows by seed key, car rental papers through bookings and reset error texts (TD-B218–B220) |
+| P16.4 Select handlers and dead props | S4 | L | H | L | M | P16.1, P16.2 | **Done 2026-11-13:** 14 custom select handlers honour `ids` through core `selectIdsOf` (TD-B217; also fixed a 500 in the PD bid picker for roles without contractor access), `method` off the `#ApiSelect` meta and 463 view props (TD-F91) |
+| P16.5 Final round | S3 | M | H | L | S | all | **Done 2026-11-13:** backup (199 collections) and reset with no seed row skipped and 0 errors; full `npm run verify` 8/8 (maestro 2144, sinfonia 2288, armonia 149 tests); 20 rows closed, 11 found (TD-B221–B226, TD-F96–F99); commits asked for |
+
