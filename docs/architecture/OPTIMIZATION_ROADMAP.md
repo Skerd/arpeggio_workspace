@@ -210,3 +210,10 @@ Module test coverage (D24) is done for every launch module and swissOutreach (20
 | P16.4 Select handlers and dead props | S4 | L | H | L | M | P16.1, P16.2 | **Done 2026-11-13:** 14 custom select handlers honour `ids` through core `selectIdsOf` (TD-B217; also fixed a 500 in the PD bid picker for roles without contractor access), `method` off the `#ApiSelect` meta and 463 view props (TD-F91) |
 | P16.5 Final round | S3 | M | H | L | S | all | **Done 2026-11-13:** backup (199 collections) and reset with no seed row skipped and 0 errors; full `npm run verify` 8/8 (maestro 2144, sinfonia 2288, armonia 149 tests); 20 rows closed, 11 found (TD-B221–B226, TD-F96–F99); commits asked for |
 
+## P17: Debt found in P16 (D156)
+| Item | Sev | Impact | Conf | Risk | Effort | Deps | Action |
+|---|---|---|---|---|---|---|---|
+| P17.1 propertyManagement and propertyDevelopment | S3 | M | H | L | S | P16 | **Done 2026-11-13:** BIM `elementCount` dropped (TD-B221), inspections created Scheduled (TD-B222), ROI totals per currency in API, calculator, charts and PDF (TD-B223), cancel from Rescheduled (TD-B224), Start/Complete on action permissions (TD-F97); live: a test inspection rescheduled, cancelled, deleted |
+| P17.2 Core | S3 | M | H | L | S | P16 | **Done 2026-11-13:** users, roles and PD approval-role pickers honour `ids` (TD-B225), generic core demo texts with eCommerce seeding its own notice (TD-B226), "is a required field" for an empty enum (TD-F96), Studio without `method` (TD-F98), form pin map settles zooms (TD-F99) |
+| P17.3 Final round | S3 | M | H | L | S | all | **Done 2026-11-13:** full `npm run verify` 7/8: one new maestro test (`inspection.editAndPicker`, six creates on one unit) got a 409 under full-suite load and passes alone 3/3 (TD-B229, core retries without delay); maestro suite rerun 2301/2301; 10 rows closed, 6 found (TD-B227–B229, TD-F100–F102); commits asked for |
+
