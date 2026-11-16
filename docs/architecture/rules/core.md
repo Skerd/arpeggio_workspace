@@ -43,7 +43,7 @@ vertical's use of core. Read [../CORE_USAGE_GUIDE.md](../CORE_USAGE_GUIDE.md) fo
   - Do **not** create per-module `module.json` (a reverted idea), and never add a second manifest.
 - **Folders:** use the same folder name under `armonia/src/modules/<m>/`, `maestro/modules/<m>/`, `sinfonia/src/modules/<m>/`.
 - **Maestro:**
-  - `database/moduleBootstrap.ts` exports `moduleBootstrap` (models, optional `defaultRoles`). Never hardcode models in `maestro/initializer/index.ts`.
+  - `database/moduleBootstrap.ts` exports `moduleBootstrap` (models, optional `defaultRoles`, optional `platformOnlyUses`: platform-only models its companies may keep their own rows of, D161). Never hardcode models in `maestro/initializer/index.ts`.
   - HTTP files live under `api/` and export `basePath` + `router`. They are discovered by `routeRegistry.ts`; never `app.use` them in `apiServer.ts`.
   - Cron: `utilities/cron/` exports `register*CronHandlers`. Kafka: `kafka/` exports `start*KafkaConsumer(s)`.
   - Discovery loaders match files with `isModuleCodeFile` / `moduleCodeFile` / `withoutModuleExtension` (`modules/core/utilities/modules/moduleCodeFiles.ts`) and never hard-code `.ts` (D106).
