@@ -10,9 +10,10 @@ import * as zod from "./zod.mjs";
 import * as modelAccess from "./modelAccess.mjs";
 import * as i18n from "./i18n.mjs";
 import * as governance from "./governance.mjs";
+import * as sheetWidgets from "./sheetWidgets.mjs";
 import {compareWithBaseline} from "./lib.mjs";
 
-const CHECKS = {boundaries, plugins, zod, "model-access": modelAccess, i18n, governance};
+const CHECKS = {boundaries, plugins, zod, "model-access": modelAccess, i18n, governance, "sheet-widgets": sheetWidgets};
 const args = process.argv.slice(2);
 const update = args.includes("--update-baseline");
 const verbose = args.includes("--verbose");

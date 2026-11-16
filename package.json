@@ -19,6 +19,7 @@
         "check:model-access": "node scripts/checks/run.mjs model-access",
         "check:i18n": "node scripts/checks/run.mjs i18n",
         "check:governance": "node scripts/checks/run.mjs governance",
+        "check:sheet-widgets": "node scripts/checks/run.mjs sheet-widgets",
         "verify": "node scripts/verify.mjs",
         "dev": "node scripts/dev/arpeggio.mjs",
         "dev:ecommerce": "node scripts/dev/arpeggio.mjs up ecommerce",
