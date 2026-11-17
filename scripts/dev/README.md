@@ -54,6 +54,8 @@ The launcher also derives some values:
 
 Launcher-only keys: `KAFKA_PREFIX`, `PANEL_PORT`, `PUBLIC_APP`, `PUBLIC_PORT`.
 
+**A server that crashes while loading** (a half-saved file) only watches the files it got to load, so a fix elsewhere would not restart it. The launcher prints a red `[<profile>:<role>] DOWN` line every 30 seconds until it is back, and restarts it on the next change under `maestro/modules` (it touches the server's entry file).
+
 ## reset
 
 `reset <profile>`:

@@ -69,7 +69,6 @@
   "sinfonia/src/modules/core/clients/panel/private/chat/center/messages/message/contextActions/pinMessage.tsx no-extra-boolean-cast": 1,
   "sinfonia/src/modules/core/clients/panel/private/chat/center/messages/message/contextActions/react.tsx @typescript-eslint/no-unsafe-function-type": 1,
   "sinfonia/src/modules/core/clients/panel/private/chat/center/messages/message/index.tsx no-extra-boolean-cast": 1,
-  "sinfonia/src/modules/core/clients/panel/private/chat/center/messages/message/index.tsx prefer-const": 1,
   "sinfonia/src/modules/core/clients/panel/private/chat/center/messages/messagesFetcher.tsx no-extra-boolean-cast": 3,
   "sinfonia/src/modules/core/clients/panel/private/chat/center/messages/messagesFetcher.tsx prefer-const": 2,
   "sinfonia/src/modules/core/clients/panel/private/chat/center/typingIndicators.tsx @typescript-eslint/no-unused-expressions": 2,

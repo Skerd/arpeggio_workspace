@@ -163,12 +163,62 @@ function isPortFree(port) {
 
 const COLORS = [36, 33, 35, 32, 34, 31];
 
-function pipeWithPrefix(stream, label, color, logFile) {
+function pipeWithPrefix(stream, label, color, logFile, onLine = () => {}) {
     const lines = readline.createInterface({input: stream});
     lines.on("line", (line) => {
         process.stdout.write(`\x1b[${color}m[${label}]\x1b[0m ${line}\n`);
         logFile.write(`${line}\n`);
+        onLine(line);
     });
+}
+
+const ANSI = /\x1b\[[0-9;]*[A-Za-z]/g;
+const DOWN_REPEAT_MS = 30_000;
+
+/**
+ * A maestro server that crashes while loading stays down under `node --watch`: it only watches the files it got to
+ * load, so fixing another file never restarts it (TD-T16: cron and websocket sat dead for hours). Watches for node's
+ * "Failed running" line, says `[profile:role] DOWN` in red until "Restarting", and on any change under
+ * `maestro/modules` touches the server's entry file, which node always watches, so it restarts.
+ */
+function createCrashWatch(profile) {
+    const down = new Map();
+    const entryOf = (role) => path.join(maestroDir, "xServers", MAESTRO_SERVERS[role]);
+    const sayDown = (role) => console.error(
+        `\x1b[31m[${profile.name}:${role}] DOWN: it failed while loading; it restarts on the next change under maestro/modules\x1b[0m`,
+    );
+    let watcher = null;
+    let debounce = null;
+    const restartDown = () => {
+        clearTimeout(debounce);
+        debounce = setTimeout(() => {
+            const now = new Date();
+            for (const role of down.keys()) {
+                try { fs.utimesSync(entryOf(role), now, now); } catch { /* entry moved: node --watch reports it */ }
+            }
+        }, 300);
+    };
+    return {
+        line(role, raw) {
+            if (!MAESTRO_ROLES.includes(role)) return;
+            const line = raw.replace(ANSI, "").trim();
+            if (line.startsWith("Failed running") && !down.has(role)) {
+                sayDown(role);
+                down.set(role, setInterval(() => sayDown(role), DOWN_REPEAT_MS));
+                watcher ??= fs.watch(path.join(maestroDir, "modules"), {recursive: true}, restartDown);
+            } else if (line.startsWith("Restarting") && down.has(role)) {
+                clearInterval(down.get(role));
+                down.delete(role);
+                console.log(`\x1b[32m[${profile.name}:${role}] restarting\x1b[0m`);
+            }
+        },
+        close() {
+            for (const timer of down.values()) clearInterval(timer);
+            down.clear();
+            clearTimeout(debounce);
+            watcher?.close();
+        },
+    };
 }
 
 async function up(profile, onlyArg) {
@@ -189,6 +239,7 @@ async function up(profile, onlyArg) {
     console.log(`Logs: ${logDir}\n`);
 
     const children = [];
+    const crashWatch = createCrashWatch(profile);
     let stopping = false;
     // Each child leads its own process group, so npm → ts-node-dev → node all get the signal.
     const signalAll = (signal) => {
@@ -199,6 +250,7 @@ async function up(profile, onlyArg) {
     const stopAll = (code) => {
         if (stopping) return;
         stopping = true;
+        crashWatch.close();
         signalAll("SIGTERM");
         // Some servers' shutdown hooks never finish; don't leave them orphaned.
         setTimeout(() => {
@@ -220,8 +272,9 @@ async function up(profile, onlyArg) {
         });
         children.push(child);
         const color = COLORS[index % COLORS.length];
-        pipeWithPrefix(child.stdout, label, color, logFile);
-        pipeWithPrefix(child.stderr, label, color, logFile);
+        const onLine = (line) => crashWatch.line(spec.role, line);
+        pipeWithPrefix(child.stdout, label, color, logFile, onLine);
+        pipeWithPrefix(child.stderr, label, color, logFile, onLine);
         child.on("exit", (code, signal) => {
             if (stopping) return;
             console.error(`\x1b[31m[${label}] exited (${signal ?? code}). Stopping ${profile.name}.\x1b[0m`);
