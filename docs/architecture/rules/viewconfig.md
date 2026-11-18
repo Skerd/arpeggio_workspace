@@ -95,6 +95,8 @@ Tokens live in `sinfonia/src/modules/core/components/viewEngine/widgetRegistry.t
 | Show/hide by value | `#FormWhenFieldValueIn` (`watchField`, `whenValues`, optional `clearFields`) | Inspection |
 | Discount (sale only) | `#LocalDiscountField` | Sale create — do not reuse elsewhere unless the field is the same |
 
+An `#ApiSelect` offers "Create new '…'" under its dropdown's list for every model whose module lists its create page in `widgetContribution` `createPages` (D169). A new entity with a create page and a `/select` adds that one line; nothing goes in `*.views.ts`.
+
 `#DatePicker` and `#FilePicker` are in the type union but **not** registered. Use `#DateInput` and `#MediaField` / `#FormMultiLocalFileField`.
 
 ### Hierarchy cascade — copy props, do not invent
