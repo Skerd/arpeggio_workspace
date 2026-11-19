@@ -114,7 +114,8 @@ Reference module: **dentalClinic** (D136). Other modules are brought in line whe
   - **First columns:** title → when → who → amount → status.
   - **Hidden by default:** technical or rarely filled columns (codes, sort order, linked accounts).
   - **Time-based lists** (appointments, bookings) offer a "When" quick filter (Upcoming / Today / Past).
-- **Why:** the dental appointments table hid both the patient and the start time.
+  - **Search first, filters on request (D170):** every list opens with one compact search bar over every field the user can read (linked records by name). Active filters sit inside it as tags; its filter toggle opens a small dropdown with the page's quick filters and "Add custom filter" (the rule builder, in a dialog). Filters never take a full-width panel on the page.
+- **Why:** the dental appointments table hid both the patient and the start time. The old filter bar looked like a search box but opened a field/operator/value builder, which people who just want to type a name could not use.
 
 ### Controls (AGT-02, restated for screens)
 Every visible control does what it says. A menu item with no target, such as "Edit" on a record that has only actions, is hidden.
