@@ -42,6 +42,7 @@ vitest + Testing Library. Forms and sheets: [viewconfig.md](viewconfig.md).
 ### FE-06 · MUST · Lazy pages
 - **Rule:** Every panel page is loaded with `React.lazy` from its route contribution, with one Suspense boundary in the core shell. The contribution files themselves stay eagerly globbed.
 - **Current state:** done (2026-11-06). Every route contribution declares its pages as `const Page = lazy(() => import("…"))`; `src/modules/core/clients/panel/entryPoint/index.tsx` has the one `Suspense` boundary. A new page follows the same line.
+- **Portal (D173):** the same holds for the portal: `clients/portal/shared/layout/index.tsx` has the pages' one boundary, and section routes (`*SiteRoutes.tsx`) and account shells add none, so a navigation keeps the current page until the next one's code is ready.
 - **Why:** D21. **Enforce:** review.
 
 ### FE-07 · MUST · One UI primitive layer
