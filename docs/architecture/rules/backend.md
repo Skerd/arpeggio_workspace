@@ -37,7 +37,7 @@ rules in [security.md](security.md).
 
 ### BE-04 · MUST · Transactions
 - **Rule:** Writes run inside the session owned by `transactionHandler` + `asyncHandler` (the factory does this already). Never commit or abort ad hoc, and never `startSession()` in feature code. Outside requests, use `runInTransaction`.
-- **Why:** verified (`asyncHandler.ts` retries `TransientTransactionError`, ends the session). **Enforce:** review.
+- **Why:** verified (`asyncHandler.ts` retries `TransientTransactionError`, ends the session; a middleware that fails before the handler is rolled back by `failedRequestCleanup`, mounted after every router, D176). **Enforce:** review.
 
 ### BE-05 · MUST · Validation contract
 - **Rule:** Every body is validated by `validateFormZod` with an Armonia `(languageCode, form) => ZodObject` factory, the same factory sinfonia's form imports. Never write ad-hoc `req.body` checks. For list/select/single/delete/restore, reuse `armonia/src/modules/core/utilities/zod/shared.validator.ts`.

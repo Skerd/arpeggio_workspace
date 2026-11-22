@@ -24,7 +24,7 @@ Scope: all request paths, permissions, tenant data, sensitive data, integrations
 - **Why:** D14, D54. **Enforce:** `actionPermissionMW`; `actionPermissions.test.ts`; review for self-service relation checks.
 
 ### SEC-03 · MUST · Server-owned request keys can't come from the client
-- **Built (D13, D52):** `stripServerKeys` (`maestro/modules/core/utilities/middlewares/serverKeys.ts`) runs first on every route (mounted in `routeRegistry.ts` and the test harness). It removes the keys in `SERVER_KEYS` from the client body and keeps the client's values aside. Raw-body webhook routes are skipped.
+- **Built (D13, D52):** `stripServerKeys` (`maestro/modules/core/utilities/middlewares/serverKeys.ts`) runs first on every route (mounted in `routeRegistry.ts` and the test harness). It removes the keys in `SERVER_KEYS` from the client body and keeps the client's values aside. Raw-body webhook routes are skipped. A multipart body is parsed later, by `mediaUploadMW`, which moves server keys out of the form's fields and its `data` JSON the same way (`quarantineServerKeys`, TD-B250).
 - `validateFormZod` validates the client's own values. When merging, a value a middleware wrote wins, otherwise the validated client value is used. The validated form is kept as `validatedForm`, and `buildCreate/UpdateDataFromSchemaDef` read SchemaDef fields named like server keys from it. That fixes collisions like a campaign recipient's `languageCode`.
 - **MUST:** a middleware that writes a new key into `req.body` adds it to `SERVER_KEYS`. **MUST NOT:** a handler reads a server-owned key from anywhere but its params.
 - **Why:** D13, D52. **Enforce:** `serverKeys.test.ts`; every HTTP test runs through the guard.
