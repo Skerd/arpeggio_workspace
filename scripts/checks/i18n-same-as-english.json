@@ -11,7 +11,9 @@
     "Sunset Lounge",
     "TCR",
     "UID",
-    "UPC"
+    "UPC",
+    "PDF",
+    "Audio"
   ],
   "de-CH": [
     "Account SID",
@@ -207,7 +209,9 @@
     "WhatsApp",
     "WhatsApp (optional)",
     "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
-    "yyyy-MM-dd"
+    "yyyy-MM-dd",
+    "Upload",
+    "Neutral"
   ],
   "fr-FR": [
     "Accessible",
@@ -438,7 +442,9 @@
     "VIN",
     "Visible",
     "WhatsApp",
-    "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+    "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+    "Scores",
+    "Archive"
   ],
   "it-IT": [
     "Account",
@@ -703,6 +709,7 @@
     "VIN",
     "WhatsApp",
     "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
-    "yyyy-MM-dd"
+    "yyyy-MM-dd",
+    "Neutral"
   ]
 }
