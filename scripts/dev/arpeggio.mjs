@@ -9,6 +9,7 @@
  *
  *   node scripts/dev/arpeggio.mjs up <profile> [--only api,websocket,kafka,cron,panel,public]
  *   node scripts/dev/arpeggio.mjs reset <profile> [--force]
+ *   node scripts/dev/arpeggio.mjs run <profile> <command...>   (in maestro/, with the profile's env)
  *   node scripts/dev/arpeggio.mjs list
  *
  * See scripts/dev/README.md.
@@ -94,10 +95,6 @@ function maestroOverrides(profile) {
     const publicHost = (profile.PUBLIC_APP === "portal" && profile.PORTAL_ROOT_DOMAIN) || "localhost";
     if (profile.PUBLIC_APP && profile.PUBLIC_PORT) clientUrls.push(`${profile.PUBLIC_APP}=http://${publicHost}:${profile.PUBLIC_PORT}`);
     env.SINFONIA_CLIENT_URLS = clientUrls.join(",");
-    // Dev sends no real email (TD-B192): turn it on with `EMAIL_ENABLED=true npm run dev -- up <profile>`, or with
-    // EMAIL_ENABLED=true in the profile, which the loop below applies last.
-    env.EMAIL_ENABLED = process.env.EMAIL_ENABLED === "true" ? "true" : "false";
-
     for (const [key, value] of Object.entries(profile)) {
         if (key !== "name" && !LAUNCHER_KEYS.includes(key)) env[key] = value;
     }
@@ -343,9 +340,18 @@ async function reset(profile, force) {
     process.exit(result.status ?? 1);
 }
 
+/**
+ * Whether a profile's servers send real email (D187): the profile file, else the shell, else `maestro/.env` decides,
+ * the order the servers' environment is built in. The launcher no longer turns it off on its own.
+ */
+function emailEnabled(profile) {
+    return (profile.EMAIL_ENABLED ?? process.env.EMAIL_ENABLED ?? parseEnvFile(path.join(maestroDir, ".env")).EMAIL_ENABLED) === "true";
+}
+
 function describe(profile) {
+    const email = emailEnabled(profile) ? "on" : "\x1b[33moff\x1b[0m";
     const lines = [
-        `\x1b[1m${profile.name}\x1b[0m  modules=${profile.ENABLED_MODULES || "(all)"}  db=${profile.MONGODB_DB_NAME}  redis=${profile.REDIS_DATABASE ?? "0"}  kafka=${profile.KAFKA_PREFIX ? `${profile.KAFKA_PREFIX}-*` : "(unprefixed)"}`,
+        `\x1b[1m${profile.name}\x1b[0m  modules=${profile.ENABLED_MODULES || "(all)"}  db=${profile.MONGODB_DB_NAME}  redis=${profile.REDIS_DATABASE ?? "0"}  kafka=${profile.KAFKA_PREFIX ? `${profile.KAFKA_PREFIX}-*` : "(unprefixed)"}  email=${email}`,
         `  api http://localhost:${profile.SERVER_PORT}   ws ws://localhost:${profile.WEBSOCKET_PORT}`,
         `  panel http://localhost:${profile.PANEL_PORT}`,
     ];
@@ -359,6 +365,17 @@ async function list() {
         const running = !(await isPortFree(profile.SERVER_PORT));
         console.log(`${describe(profile)}\n  status: ${running ? "\x1b[32mrunning\x1b[0m" : "stopped"}\n`);
     }
+}
+
+/** Runs a command in maestro/ with the env the profile's servers get, so a script sees what they see. */
+function run(profile, commandLine) {
+    if (commandLine.length === 0) fail("Usage: arpeggio.mjs run <profile> <command...>");
+    const result = spawnSync(commandLine[0], commandLine.slice(1), {
+        cwd: maestroDir,
+        stdio: "inherit",
+        env: {...process.env, ...maestroOverrides(profile)},
+    });
+    process.exit(result.status ?? 1);
 }
 
 function fail(message) {
@@ -382,9 +399,12 @@ switch (command) {
     case "list":
         await list();
         break;
+    case "run":
+        run(loadProfile(profileName), rest);
+        break;
     default:
         console.log("Usage: arpeggio.mjs up <profile> [--only api,websocket,kafka,cron,panel,public]\n" +
-            "       arpeggio.mjs reset <profile> [--force]\n       arpeggio.mjs list\n" +
+            "       arpeggio.mjs reset <profile> [--force]\n       arpeggio.mjs run <profile> <command...>\n       arpeggio.mjs list\n" +
             `Profiles: ${listProfiles().join(", ")}`);
         process.exit(command ? 1 : 0);
 }

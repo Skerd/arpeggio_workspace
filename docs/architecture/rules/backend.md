@@ -84,9 +84,9 @@ rules in [security.md](security.md).
 - **Rule:**
   - Short side effects run as after-commit tasks.
   - Scheduled or sweep work runs as cron handlers (`register*CronHandlers`, in-process leader runner).
-  - Kafka is only for work that must survive a crash or run in another server (assistant, rollups).
+  - Kafka is only for work that must survive a crash or run in another server (assistant, rollups, and every client or staff email, one topic per email kind, D188).
   - Kafka is **optional**: every producer has an in-process fallback (`publishEvent` returns `false` → the caller handles it), and the API never requires Kafka to serve requests.
-- **Why:** D41. **Enforce:** review.
+- **Why:** D41, D188. **Enforce:** review.
 
 ### BE-11 · MUST · Logging
 - **Rule:**
