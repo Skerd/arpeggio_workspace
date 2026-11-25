@@ -74,6 +74,7 @@ rules in [security.md](security.md).
 
 ### BE-09 · MUST · External integrations
 - **Outbound:** calls go through a typed adapter with a timeout and the core circuit breaker (`executeWithCircuitBreaker`).
+- **Company-supplied addresses (D189):** a URL or host a company enters (an Odoo server, a card terminal, a fiscal endpoint or proxy) is checked by the core guard `maestro/modules/core/utilities/security/publicUrl.ts` before every request and every redirect hop: `assertPublicUrl` refuses a private, local or internal address, or a name that does not resolve, with `url_not_public`. Where the client can take a resolver (node `http`/`https`, axios agents), it also connects through `publicOnlyLookup`, so a name cannot switch to a private address between the check and the connect.
 - **Inbound webhooks:** verify the signature, are idempotent (stored event id, duplicates ignored), and do their work after commit.
 - **Errors:** provider errors map to exception keys.
 - **Secrets:** come from env/secrets only.

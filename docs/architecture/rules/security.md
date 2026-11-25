@@ -33,7 +33,7 @@ Scope: all request paths, permissions, tenant data, sensitive data, integrations
 - **Built (D18):** `resolveCompanyByOrigin` (`maestro/modules/core/utilities/marketing/resolveCompanyByOrigin.ts`) resolves:
   - the portal apex → the platform company;
   - `{siteSlug}.{root}` → that company's site;
-  - any other host → the company whose `allowedDomains` lists it;
+  - any other host → the company whose `allowedDomains` lists it. Only the platform sets a company's own domains (`PUT /api/platform/companies/domains/:id`, D189; the field is write-locked for everyone else), and a host belongs to one company, except hosts the platform serves itself (`isPlatformHost` in `maestro/modules/core/utilities/company/companyDomains.ts`);
   - anything else → 404 `company_not_found_for_origin`.
 - The `allowedDomains: "*"` fallback applies only to local development origins (`isLocalDevOrigin` in `portalOrigin.ts`: `localhost`, `*.localhost`, loopback).
 - **MUST NOT:** add another host→company lookup. `utilities/company/siteHost.ts` only *builds* `{slug}.{root}` hosts for site provisioning; it is not a resolver.
@@ -41,6 +41,7 @@ Scope: all request paths, permissions, tenant data, sensitive data, integrations
 
 ### SEC-05 · MUST · Tenant isolation
 - See DB-02. A forgotten company filter is the worst failure this platform can have. **Why:** D16.
+- The platform company is not one team: its members are portal accounts that do not know each other. Its records that belong to one person stay that person's (D163 addresses, saved searches, favourites), and a file it holds that is not public opens only for the person who uploaded it and the companies it was shared with; a refusal answers `media_not_found` (D189, `companyOwnsMedia` in `maestro/modules/core/api/auxiliary/private/media.ts`).
 - Stored ids too (D104): a tenant record's references to tenant-owned rows must be its company's own (or shared with it); `ownershipPlugin` refuses others (`reference_outside_tenant`), and a cross-company flow names its fields with `allowForeignReferences` and a reason.
 
 ### SEC-06 · MUST · Special-category data
