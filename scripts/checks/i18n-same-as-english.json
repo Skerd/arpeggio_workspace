@@ -13,7 +13,9 @@
     "UID",
     "UPC",
     "PDF",
-    "Audio"
+    "Audio",
+    "IBAN",
+    "BIC / SWIFT"
   ],
   "de-CH": [
     "Account SID",
@@ -211,7 +213,8 @@
     "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
     "yyyy-MM-dd",
     "Upload",
-    "Neutral"
+    "Neutral",
+    "Bank"
   ],
   "fr-FR": [
     "Accessible",
