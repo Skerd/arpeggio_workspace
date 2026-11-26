@@ -74,3 +74,12 @@ Scope: all request paths, permissions, tenant data, sensitive data, integrations
 - **Rule:** Custom routers that read tenant documents still run `SchemaGuard` filtering (canonical: `.../realEstate/private/dashboard.ts`).
 - **Why:** existing database rule.
 - **Exception (D100):** the company switcher's basic-info endpoints return name, description and logo of the caller's own active companies without the Company field permissions, so every member can switch.
+
+### SEC-10 · MUST · A company's admin roles
+- **Rule (D194):** every company has two reserved admin roles, both holding every permission of the company.
+  - **SysAdmin** goes to whoever created the company (`assignCreatorRoles`, found by slug) and is never given or taken by hand.
+  - **General Administrator** is the company's owner: one person at a time, given and taken away only by the SysAdmin, and never in the platform company, where everything the company manages (other companies, platform lists, mail servers, the report desk) reaches every company.
+  - Only a SysAdmin changes the roles or account status of someone who holds an admin role; anyone allowed to edit users still changes ordinary members.
+  - The rules live in `maestro/modules/core/domain/roles/adminRoles.ts` (`assertAssignableRoles`, `assertMayChangeMember`, `assignableGeneralAdministratorRole`); every route that gives a role or changes a member's roles or status calls them, and the role pickers list General Administrator for the SysAdmin only.
+- **MUST NOT:** filter a role picker or a role assignment with a bare `isAdmin: false` again, or hand out an admin role by any other path.
+- **Why:** D194. **Enforce:** `adminRoles.test.ts`; review.
