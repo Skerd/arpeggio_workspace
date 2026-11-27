@@ -50,6 +50,7 @@ vertical's use of core. Read [../CORE_USAGE_GUIDE.md](../CORE_USAGE_GUIDE.md) fo
 - **Sinfonia:**
   - Panel UI mounts only through `clients/panel/<kind>Contribution.tsx`. There are 12 kinds: sidebar, routeConfig, widget, tenancySettings, siteRoom, accountNav, accountSettings, authPanel, panelLayout, menuLanguage, rolesPermissions, plus portal (`clients/portal/portalContribution.tsx`).
   - Never edit core `routeConfig.tsx` or the core sidebar to mount a feature.
+  - A module whose platform lists (D160) the platform company manages names their pages in its route contribution's `platformListUrls` (D195: eCommerce's `/tenancy/systemSettings/categories`). The platform company, which runs core only, then gets those pages and their Configurations entries and nothing else of the module. On the server this needs nothing from the module: a router built with `platformListRouteOptions` is recorded in `utilities/security/platformListRegistry.ts`, and for the platform company authMW lets it through, `getCompanyAccess` keeps that list's permission tags, and the access map, table and view configs and audit log include its model (`isModelForCompany`).
   - After adding a module folder, run `npm run sync:module-aliases`.
 - **Gating:** `ENABLED_MODULES` (maestro) / `VITE_ENABLED_MODULES` (sinfonia). `core` is always on.
 - **Why:** verified discovery; D01a; existing modules rule (module.json clause retired). **Enforce:** review + check `boundaries`.
