@@ -15,7 +15,8 @@
     "PDF",
     "Audio",
     "IBAN",
-    "BIC / SWIFT"
+    "BIC / SWIFT",
+    "SUV"
   ],
   "de-CH": [
     "Account SID",
@@ -214,7 +215,10 @@
     "yyyy-MM-dd",
     "Upload",
     "Neutral",
-    "Bank"
+    "Bank",
+    "Coupé",
+    "Minivan",
+    "Bus"
   ],
   "fr-FR": [
     "Accessible",
@@ -447,7 +451,10 @@
     "WhatsApp",
     "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
     "Scores",
-    "Archive"
+    "Archive",
+    "Coupé",
+    "Scooter",
+    "Bus"
   ],
   "it-IT": [
     "Account",
@@ -600,7 +607,9 @@
     "Villa",
     "VIN",
     "WhatsApp",
-    "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+    "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+    "Coupé",
+    "Scooter"
   ],
   "sq-AL": [
     "Account SID",
@@ -713,6 +722,9 @@
     "WhatsApp",
     "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
     "yyyy-MM-dd",
-    "Neutral"
+    "Neutral",
+    "Hatchback",
+    "Sedan",
+    "Minivan"
   ]
 }
