@@ -484,6 +484,7 @@ to schedule it.
 | TD-F168 | Two panel review cards cut the reviewer's name short next to the "Hidden by the platform" badge ("Arta H…") (found 2026-11-25, D191) | car rental and dental review cards | Put the badge on its own line under the title, as the other cards do | UX-03 |
 | TD-F169 | The eCommerce menu dictionaries still carry the removed ListingFlag menu label `listingflags` (found 2026-11-25, D191) | `sinfonia/src/modules/eCommerce/assets/languages/*/menus.json` | Delete the label in 5 locales | FE-10 |
 | TD-F170 | A company cannot answer a review publicly: D191 says companies reply to or report a review, and replying does not exist yet in any module (found 2026-11-25, D191) | the four modules' review models and pages | A reply field written by the company once, shown under the review on its public page | UX-07 |
+| TD-F171 | ~~The product category edit and create pages never sent the five-language names, the edit form filled the English `name` with the reader-language one, and the single read lost `names` because `enrichSingle` came before `...platformList`, which brings its own~~ FIXED 2026-11-27 (P27): `enrichSingle` after the platform-list options; initial `name` from `names.en`, `names` in the initial values and both payloads (found 2026-11-27, D196/P27) | `maestro/modules/eCommerce/api/eCommerce/private/checked/category.ts`, `sinfonia/src/modules/eCommerce/clients/panel/private/categories/editCategory.tsx`, `createCategory.tsx` | Done | AGT-02, AGT-10 |
 
 ## Tooling / repo
 | ID | Debt | Where | Defined fix |
